@@ -5,13 +5,13 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkLowLevel.PeriodicFrame;
+import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -34,9 +34,9 @@ public class ArmSubsystem extends SubsystemBase {
   // === ARM ====
 
   // NEO motors connected to Spark Max
-  private CANSparkMax armMotorLeft;
-  private CANSparkMax armMotorRight;
-  private CANSparkMax armMotorLeader;
+  private SparkMax armMotorLeft;
+  private SparkMax armMotorRight;
+  private SparkMax armMotorLeader;
 
   private SparkPIDController armPIDControllerLeft;
   private SparkPIDController armPIDControllerRight;
@@ -66,8 +66,8 @@ public class ArmSubsystem extends SubsystemBase {
     // === ARM initialization
     // ==========================
 
-    armMotorLeft = new CANSparkMax(ArmMotorConstantsEnum.LEFTMOTOR.getArmMotorID(), MotorType.kBrushless);
-    armMotorRight = new CANSparkMax(ArmMotorConstantsEnum.RIGHTMOTOR.getArmMotorID(), MotorType.kBrushless);
+    armMotorLeft = new SparkMax(ArmMotorConstantsEnum.LEFTMOTOR.getArmMotorID(), MotorType.kBrushless);
+    armMotorRight = new SparkMax(ArmMotorConstantsEnum.RIGHTMOTOR.getArmMotorID(), MotorType.kBrushless);
 
     // TODO: We will probably have only one Thru-bore encoder, which is sufficient
     // for us; revise the code as needed
@@ -110,8 +110,8 @@ public class ArmSubsystem extends SubsystemBase {
    * @param c             - motor constants
    * @param motorToFollow - motor to follow if this is a follower
    */
-  private void configureArmMotors(CANSparkMax motor,  RelativeEncoder encoder, SparkPIDController p, ArmMotorConstantsEnum c,
-      CANSparkMax motorToFollow) {
+  private void configureArmMotors(SparkMax motor,  RelativeEncoder encoder, SparkPIDController p, ArmMotorConstantsEnum c,
+      SparkMax motorToFollow) {
 
     motor.restoreFactoryDefaults(); //restores the state of the motor to factory defaults
     motor.clearFaults();  //clears a fault that has occurred since the last time the faults were reset

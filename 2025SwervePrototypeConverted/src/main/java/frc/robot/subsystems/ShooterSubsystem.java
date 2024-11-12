@@ -8,7 +8,7 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkLowLevel.PeriodicFrame;
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
@@ -25,9 +25,9 @@ import frc.robot.Constants.GPMConstants.Shooter.ShooterPIDConstants;
 public class ShooterSubsystem extends SubsystemBase {
 
   // NEO motors connected to Spark Max
-  private CANSparkMax shooterMotorLeft;
-  private CANSparkMax shooterMotorRight;
-  private CANSparkMax shooterMotorLeader;
+  private SparkMax shooterMotorLeft;
+  private SparkMax shooterMotorRight;
+  private SparkMax shooterMotorLeader;
 
   // Built-in NEO encoders
   // Will be used with Velocity PID
@@ -46,8 +46,8 @@ public class ShooterSubsystem extends SubsystemBase {
     // Check if need to initialize shooter
     if (! EnabledSubsystems.shooter) { return; }
 
-    shooterMotorLeft = new CANSparkMax(ShooterMotorConstantsEnum.LEFTMOTOR.getShooterMotorID(), MotorType.kBrushless);
-    shooterMotorRight = new CANSparkMax(ShooterMotorConstantsEnum.RIGHTMOTOR.getShooterMotorID(), MotorType.kBrushless);
+    shooterMotorLeft = new SparkMax(ShooterMotorConstantsEnum.LEFTMOTOR.getShooterMotorID(), MotorType.kBrushless);
+    shooterMotorRight = new SparkMax(ShooterMotorConstantsEnum.RIGHTMOTOR.getShooterMotorID(), MotorType.kBrushless);
 
     shooterPIDControllerLeft = shooterMotorLeft.getPIDController();
     shooterPIDControllerRight = shooterMotorRight.getPIDController();
@@ -77,8 +77,8 @@ public class ShooterSubsystem extends SubsystemBase {
    * @param c             - motor constants
    * @param motorToFollow - motor to follow if this is a follower
    */
-  private void configureshooterMotors(CANSparkMax motor, RelativeEncoder encoder, SparkPIDController p, ShooterMotorConstantsEnum c,
-      CANSparkMax motorToFollow) {
+  private void configureshooterMotors(SparkMax motor, RelativeEncoder encoder, SparkPIDController p, ShooterMotorConstantsEnum c,
+      SparkMax motorToFollow) {
 
     motor.restoreFactoryDefaults();
     motor.clearFaults();
