@@ -6,9 +6,15 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.EncoderConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkLowLevel.PeriodicFrame;
 import com.revrobotics.spark.SparkMax;
@@ -38,9 +44,9 @@ public class ArmSubsystem extends SubsystemBase {
   private SparkMax armMotorRight;
   private SparkMax armMotorLeader;
 
-  private SparkPIDController armPIDControllerLeft;
-  private SparkPIDController armPIDControllerRight;
-  private SparkPIDController armPidControllerLeader;
+  private SparkClosedLoopController armPIDControllerLeft;
+  private SparkClosedLoopController armPIDControllerRight;
+  private SparkClosedLoopController armPidControllerLeader;
 
   // We wii use built-in NEO encoders for now
   // They're relative, but we can calibrate them based on second Pigeon on the arm
@@ -72,8 +78,8 @@ public class ArmSubsystem extends SubsystemBase {
     // TODO: We will probably have only one Thru-bore encoder, which is sufficient
     // for us; revise the code as needed
 
-    armPIDControllerLeft = armMotorLeft.getPIDController();
-    armPIDControllerRight = armMotorRight.getPIDController();
+    armPIDControllerLeft = armMotorLeft.getClosedLoopController();
+    armPIDControllerRight = armMotorRight.getClosedLoopController();
 
     // Set Arm encoders
     armEncoderLeft = armMotorLeft.getEncoder();
@@ -110,32 +116,36 @@ public class ArmSubsystem extends SubsystemBase {
    * @param c             - motor constants
    * @param motorToFollow - motor to follow if this is a follower
    */
-  private void configureArmMotors(SparkMax motor,  RelativeEncoder encoder, SparkPIDController p, ArmMotorConstantsEnum c,
+  private void configureArmMotors(SparkMax motor,  RelativeEncoder encoder, SparkClosedLoopController p, ArmMotorConstantsEnum c,
       SparkMax motorToFollow) {
 
-    motor.restoreFactoryDefaults(); //restores the state of the motor to factory defaults
+    SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
+
+    //motor.restoreFactoryDefaults(); //restores the state of the motor to factory defaults
     motor.clearFaults();  //clears a fault that has occurred since the last time the faults were reset
     motor.setInverted(c.getArmMotorInverted()); //sets motor inverted if getArmMotorInverted() returns true
 
-    motor.setIdleMode(IdleMode.kBrake); //sets motor into brake mode
+    sparkMaxConfig.idleMode(IdleMode.kBrake); //sets motor into brake mode
     //motor.setIdleMode(IdleMode.kCoast); 
 
-    encoder.setPositionConversionFactor(Arm.POSITION_CONVERSION_FACTOR);  //sets conversion between NEO units to necessary unit for positon
+    EncoderConfig encoderConfig = new EncoderConfig();
+    encoderConfig.positionConversionFactor(Arm.POSITION_CONVERSION_FACTOR);  //sets conversion between NEO units to necessary unit for positon
+    sparkMaxConfig.apply(encoderConfig);
 
     motor.setCANTimeout(0); //sets up timeout
 
-    motor.enableVoltageCompensation(Arm.nominalVoltage);  //enables voltage compensation for set voltage [12v]
+    sparkMaxConfig.voltageCompensation(Arm.nominalVoltage);  //enables voltage compensation for set voltage [12v]
    
     if (EnableCurrentLimiter.arm) {
-      motor.setSmartCurrentLimit(CurrentLimiter.arm); // sets current limit to 40 amps
+      sparkMaxConfig.smartCurrentLimit(CurrentLimiter.arm); // sets current limit to 40 amps
     }
     
-    motor.setOpenLoopRampRate(Arm.rampRate);  // sets the rate to go from 0 to full throttle on open loop
-    motor.setClosedLoopRampRate(Arm.rampRate);  // sets the rate to go from 0 to full throttle on open loop
+    sparkMaxConfig.openLoopRampRate(Arm.rampRate);  // sets the rate to go from 0 to full throttle on open loop
+    sparkMaxConfig.closedLoopRampRate(Arm.rampRate);  // sets the rate to go from 0 to full throttle on open loop
 
     // sets which motor is the leader and follower; set follower inversion if needed
     if (c.getArmMotorFollower()) {
-      motor.follow(motorToFollow,c.getArmMotorInverted());
+      sparkMaxConfig.follow(motorToFollow,c.getArmMotorInverted());
 
       motor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 100);
       motor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 250);
@@ -156,18 +166,23 @@ public class ArmSubsystem extends SubsystemBase {
 
     }
 
+    ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
     // --- PID Setup
     // set the PID sensor to motor encoder for hardware PID
-    p.setFeedbackDevice(motor.getEncoder());
-
+    closedLoopConfig.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
     // set arm PID coefficients - LIFT
-    p.setP(ArmPIDConstants.kP);
-    p.setI(ArmPIDConstants.kI);
-    p.setD(ArmPIDConstants.kD);
-    p.setIZone(ArmPIDConstants.Izone);
-    p.setFF(ArmPIDConstants.kF);
+    closedLoopConfig.p(ArmPIDConstants.kP);
+    closedLoopConfig.i(ArmPIDConstants.kI);
+    closedLoopConfig.d(ArmPIDConstants.kD);
+    closedLoopConfig.iZone(ArmPIDConstants.Izone);
+    //p.setFF(ArmPIDConstants.kF);
     // kMaxOutput = 1 ; range is -1, 1
-    p.setOutputRange(-ArmPIDConstants.kMaxOutput, ArmPIDConstants.kMaxOutput);
+    closedLoopConfig.outputRange(-ArmPIDConstants.kMaxOutput, ArmPIDConstants.kMaxOutput);
+
+    // Apply closed loop configuration
+    sparkMaxConfig.apply(closedLoopConfig);
+
+    motor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
   }
 
@@ -262,7 +277,7 @@ public class ArmSubsystem extends SubsystemBase {
    */
   public void setArmMotorAnglesSI(double angle) {
     //armPidControllerLeader.setFF(FEED_FORWARD.get(angle));
-    armMotorLeader.getPIDController().setReference(
+    armMotorLeader.getClosedLoopController().setReference(
         // armEncoderZero is encoder position at ZERO degrees
         // So, the expected encoder position is armEncoderZero plus
         // the degrees angle multiplied by ARM_ENCODER_CHANGE_PER_DEGREE
@@ -274,13 +289,13 @@ public class ArmSubsystem extends SubsystemBase {
 
    public void setArmMotorEncoder(double position) {
     // hold position for encoder value
-    armMotorLeader.getPIDController().setReference(
+    armMotorLeader.getClosedLoopController().setReference(
         position,
            ControlType.kPosition);
   } 
 
   public void stopArmPID() {
-    armMotorLeader.getPIDController().setReference((0), ControlType.kVoltage);
+    armMotorLeader.getClosedLoopController().setReference((0), ControlType.kVoltage);
   }
 
   public void armHoldPosition() {

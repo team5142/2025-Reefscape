@@ -5,12 +5,12 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkLowLevel.PeriodicFrame;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
@@ -35,8 +35,8 @@ public class ShooterSubsystem extends SubsystemBase {
   private RelativeEncoder shooterEncoderRight;
 
   // Necessary for hardware PID with Spark Max
-  private SparkPIDController shooterPIDControllerLeft;
-  private SparkPIDController shooterPIDControllerRight;
+  private SparkClosedLoopController shooterPIDControllerLeft;
+  private SparkClosedLoopController shooterPIDControllerRight;
 
   private InterpolatingDoubleTreeMap SHOOTER_POWER = new InterpolatingDoubleTreeMap();
 
@@ -49,8 +49,8 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterMotorLeft = new SparkMax(ShooterMotorConstantsEnum.LEFTMOTOR.getShooterMotorID(), MotorType.kBrushless);
     shooterMotorRight = new SparkMax(ShooterMotorConstantsEnum.RIGHTMOTOR.getShooterMotorID(), MotorType.kBrushless);
 
-    shooterPIDControllerLeft = shooterMotorLeft.getPIDController();
-    shooterPIDControllerRight = shooterMotorRight.getPIDController();
+    shooterPIDControllerLeft = shooterMotorLeft.getClosedLoopController();
+    shooterPIDControllerRight = shooterMotorRight.getClosedLoopController();
 
     shooterEncoderLeft = shooterMotorLeft.getEncoder();
     shooterEncoderRight = shooterMotorRight.getEncoder();
@@ -77,7 +77,7 @@ public class ShooterSubsystem extends SubsystemBase {
    * @param c             - motor constants
    * @param motorToFollow - motor to follow if this is a follower
    */
-  private void configureshooterMotors(SparkMax motor, RelativeEncoder encoder, SparkPIDController p, ShooterMotorConstantsEnum c,
+  private void configureshooterMotors(SparkMax motor, RelativeEncoder encoder, SparkClosedLoopController p, ShooterMotorConstantsEnum c,
       SparkMax motorToFollow) {
 
     motor.restoreFactoryDefaults();
@@ -137,7 +137,7 @@ public class ShooterSubsystem extends SubsystemBase {
    * @param speed
    */
   public void runShooterWithVelocity(double speed) {
-    shooterMotorLeader.getPIDController().setReference((speed), ControlType.kVelocity);
+    shooterMotorLeader.getClosedLoopController().setReference((speed), ControlType.kVelocity);
   }
 
   // TODO: Modify this
@@ -175,7 +175,7 @@ public class ShooterSubsystem extends SubsystemBase {
    * @param voltage
    */
   public void runShooterWithVoltagePID(double voltage) {
-    shooterMotorLeader.getPIDController().setReference(MathUtil.clamp (voltage, -Shooter.nominalVoltage, Shooter.nominalVoltage), ControlType.kVoltage);
+    shooterMotorLeader.getClosedLoopController().setReference(MathUtil.clamp (voltage, -Shooter.nominalVoltage, Shooter.nominalVoltage), ControlType.kVoltage);
   }
 
   public void stopShooter() {
