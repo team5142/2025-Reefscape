@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.IdealStartingState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPoint;
@@ -59,9 +60,11 @@ public class AutonomousTrajectory2Poses extends SequentialCommandGroup {
     addCommands(
       new RunTrajectorySequenceRobotAtStartPoint(
         new PathPlannerPath(
-          PathPlannerPath.bezierFromPoses(startPose, endPose),
+          PathPlannerPath.waypointsFromPoses(startPose, endPose),
           new PathConstraints(maxVelocity, maxAcceleration, SwerveChassis.MaxAngularRate, SwerveChassis.maxAngularAcceleration),
-          new GoalEndState(0.0, endPose.getRotation())
+          new IdealStartingState(0.0, startPose.getRotation()) ,
+          new GoalEndState(0.0, endPose.getRotation()),
+          false // reversed
         )
       )
     );
