@@ -143,10 +143,13 @@ public final class Constants {
       public static final double WHEEL_DIAMETER = Units.inchesToMeters(4);
       public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
 
-      public static double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
-      public static double maxAcceleration = 41.68; //this is Max linear acceleration units: m/s^2
-      public static double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
-      public static double maxAngularAcceleration = 37.6992; // this is max angular acceleration units: rad/s^2
+      public static final double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
+      public static final double maxAcceleration = 41.68; //this is Max linear acceleration units: m/s^2
+      public static final double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
+      public static final double maxAngularAcceleration = 37.6992; // this is max angular acceleration units: rad/s^2
+	  public static final double robotMass = 56.7; // kg
+	  public static final double robotInertia = 60.0; // KG*M^2 - for rotation
+	  public static final double wheelCOF = 1.2; // coefficient of friction for the wheels; colsons on carpet is 1.0
 
       // Customize the following values to your prototype
 			public static final double metersPerRotationFX = ( (6.75/6.12)*(107.66/100.0)*(1.0 / 48622.0) ) * 2048.0; // measure this number on the robot - remeasure on carpet

@@ -11,6 +11,7 @@ import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.util.DriveFeedforwards;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -23,6 +24,7 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.VoltageUnit;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotController;
@@ -185,6 +187,14 @@ public class DriveSubsystem extends SwerveDrivetrain implements Subsystem {
   }
 
   public void driveWithChassisSpeeds(ChassisSpeeds speeds) {
+    drive(
+      speeds.vxMetersPerSecond,
+      speeds.vyMetersPerSecond,
+      speeds.omegaRadiansPerSecond
+    );
+  }
+
+  public void driveWithChassisSpeeds(ChassisSpeeds speeds, DriveFeedforwards driveFeedforwards) {
     drive(
       speeds.vxMetersPerSecond,
       speeds.vyMetersPerSecond,

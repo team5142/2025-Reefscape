@@ -4,32 +4,28 @@
 
 package frc.robot.commands;
 
-import com.pathplanner.lib.commands.FollowPathHolonomic;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.PathPlannerTrajectory;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
+import com.pathplanner.lib.config.ModuleConfig;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Robot;
+import edu.wpi.first.math.system.plant.DCMotor;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.CurrentLimiter;
 import frc.robot.Constants.SwerveConstants.SwerveChassis;
 
 /** Add your docs here. */
-public class AutonomousTrajectoryRioCommand extends FollowPathHolonomic{
+public class AutonomousTrajectoryRioCommand extends FollowPathCommand{
 
     public AutonomousTrajectoryRioCommand(PathPlannerPath trajectoryPath) {
         super(
-            trajectoryPath,
-            RobotContainer.driveSubsystem::getPose,
-            RobotContainer.driveSubsystem::getChassisSpeeds,
-            RobotContainer.driveSubsystem::driveWithChassisSpeeds,
-            new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+            trajectoryPath, // PathPlannerPath
+            RobotContainer.driveSubsystem::getPose,  // Supplier<Pose2d>
+            RobotContainer.driveSubsystem::getChassisSpeeds, // Supplier<ChassisSpeeds>
+            RobotContainer.driveSubsystem::driveWithChassisSpeeds, // BiConsumer<ChassisSpeeds,DriveFeedforwards>
+            new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
                     new PIDConstants(
                         SwerveChassis.DRIVE_CHASSIS_KP,
                         SwerveChassis.DRIVE_CHASSIS_KI,
@@ -38,30 +34,25 @@ public class AutonomousTrajectoryRioCommand extends FollowPathHolonomic{
                         SwerveChassis.ANGLE_CHASSIS_KP, 
                         SwerveChassis.ANGLE_CHASSIS_KI,
                         SwerveChassis.ANGLE_CHASSIS_KD
-                    ), // Rotation PID constants
-                    SwerveChassis.MaxSpeed, // Max module speed, in m/s
-                    Math.sqrt(Math.pow(SwerveChassis.TRACK_WIDTH/2 ,2) + Math.pow(SwerveChassis.WHEEL_BASE/2 ,2)) , // Drive base radius in meters. Distance from robot center to furthest module.
-                    new ReplanningConfig() // Default path replanning config. See the API for the options here
+                    ) // Rotation PID constants
             ),
-            ()->{return false;},
-            RobotContainer.driveSubsystem
-        );
-    }
+            new RobotConfig(
+                    SwerveChassis.robotMass, // kg
+                    SwerveChassis.robotInertia, // kg*m^2 for rotation
+                    new ModuleConfig(
+                        SwerveChassis.WHEEL_DIAMETER/2.0, // wheel radius
+                        SwerveChassis.MaxSpeed, // Max module speed, in m/s
+                        SwerveChassis.wheelCOF, // wheel COF
+                        DCMotor.getFalcon500(1),
+                        CurrentLimiter.drive, // type of motor used
+                        1
+                    ),
 
-    public AutonomousTrajectoryRioCommand(String trajectoryName, double maxVelocity, double maxAngularVelocity) {
-        this(
-            PathPlannerPath.fromPathFile(trajectoryName)
-                .replan(
-                    PathPlannerPath.fromPathFile(trajectoryName).getStartingDifferentialPose()
-                    , new ChassisSpeeds(maxVelocity, maxVelocity, maxAngularVelocity)
-                    )
-        );
-        System.out.println("initalized trajectory: "+ trajectoryName + "V:"+maxVelocity+" A:"+maxAngularVelocity);
-    }
-
-    public AutonomousTrajectoryRioCommand(String trajectoryName){
-        this(
-            PathPlannerPath.fromPathFile(trajectoryName)
+                    SwerveChassis.TRACK_WIDTH,
+                    SwerveChassis.WHEEL_BASE
+            ),
+            ()->{return false;}, // shouldFlipPath
+            RobotContainer.driveSubsystem // subsystem requirement
         );
     }
 
