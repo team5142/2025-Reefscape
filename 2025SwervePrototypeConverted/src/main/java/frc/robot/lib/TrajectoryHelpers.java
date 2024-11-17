@@ -1,5 +1,8 @@
 package frc.robot.lib;
 
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -50,6 +53,30 @@ public class TrajectoryHelpers {
 
     public static boolean isValueBetween(double v, double min, double max) {
         return v >= min && v <= max;
+    }
+
+    /**
+     * Replanning trajectory with different speed and acceleration
+     * @param traj
+     * @param maxVelocity
+     * @param maxAngularVelocity  - rad/s
+     * @param maxAcceleration
+     * @param maxAngularAcceleration rad/s^2
+     * @return
+     */
+    public static PathPlannerPath replanTrajectory(PathPlannerPath traj, double maxVelocity, 
+                double maxAngularVelocity, double maxAcceleration, double maxAngularAcceleration) {
+        return new PathPlannerPath(
+            traj.getWaypoints()
+            , new PathConstraints(
+                maxVelocity
+                , maxAcceleration
+                , maxAngularVelocity
+                , maxAngularAcceleration
+                )
+            , traj.getIdealStartingState()
+            , traj.getGoalEndState()
+             );
     }
 
 }

@@ -4,15 +4,13 @@
 
 package frc.robot.commands;
 
-import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.PathPlannerTrajectory;
-
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotContainer;
+import frc.robot.lib.TrajectoryHelpers;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -36,24 +34,24 @@ public class RunTrajectorySequenceRobotAtStartPoint extends SequentialCommandGro
    * reverse if needed,
    * and runs the adjusted trajectory via AutonomousTrajectoryRioCommand command.
    */
-  public RunTrajectorySequenceRobotAtStartPoint(String trajectoryName, double maxVelocity, double maxAngularVelocity) {
+  public RunTrajectorySequenceRobotAtStartPoint(String trajectoryName, double maxVelocity, double maxAngularVelocity, 
+            double maxAcceleration, double maxAngularAcceleration) throws Exception {
         this(
-            PathPlannerPath.fromPathFile(trajectoryName)
-                .replan(
-                    PathPlannerPath.fromPathFile(trajectoryName).getStartingDifferentialPose()
-                    , new ChassisSpeeds(maxVelocity, maxVelocity, maxAngularVelocity)
-                    )
+          TrajectoryHelpers.replanTrajectory(
+            PathPlannerPath.fromPathFile(trajectoryName),
+            maxVelocity, maxAngularVelocity, maxAcceleration, maxAngularAcceleration)
+            
         );
         System.out.println("initalized trajectory: "+ trajectoryName + "V:"+maxVelocity+" A:"+maxAngularVelocity);
     }
 
-  public RunTrajectorySequenceRobotAtStartPoint(String trajectoryName){
-        this(
+  public RunTrajectorySequenceRobotAtStartPoint(String trajectoryName) throws Exception{
+
+    this(
           PathPlannerPath.fromPathFile(trajectoryName)
         );
         System.out.println("initalized trajectory: "+ trajectoryName);
   }
-
 
   public RunTrajectorySequenceRobotAtStartPoint(PathPlannerPath traj) {
     // Add your commands in the addCommands() call, e.g.
@@ -67,8 +65,8 @@ public class RunTrajectorySequenceRobotAtStartPoint extends SequentialCommandGro
         new PrintCommand("****Starting trajectory****"),
         // new WaitCommand(0.4),
         new InstantCommand(() -> RobotContainer.driveSubsystem
-            .setYawForTrajectory(trajectoryPath.getPreviewStartingHolonomicPose().getRotation().getDegrees())),
-        new InstantCommand(() -> RobotContainer.driveSubsystem.resetOdometry(trajectoryPath.getPreviewStartingHolonomicPose())),
+            .setYawForTrajectory(trajectoryPath.getStartingHolonomicPose().orElse(new Pose2d()).getRotation().getDegrees())),
+        new InstantCommand(() -> RobotContainer.driveSubsystem.resetOdometry(trajectoryPath.getStartingHolonomicPose().orElse(new Pose2d()))),
         // new PrintCommand(
         // "START IX:" + trajectoryPath.getInitialPose().getX()+
         // " IY:" + trajectoryPath.getInitialPose().getY()+
