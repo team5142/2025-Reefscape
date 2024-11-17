@@ -5,7 +5,13 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkLowLevel.PeriodicFrame;
@@ -24,21 +30,25 @@ import frc.robot.Constants.GPMConstants.Shooter.ShooterPIDConstants;
 
 public class ShooterSubsystem extends SubsystemBase {
 
+  private InterpolatingDoubleTreeMap SHOOTER_POWER = new InterpolatingDoubleTreeMap();
+
   // NEO motors connected to Spark Max
   private SparkMax shooterMotorLeft;
   private SparkMax shooterMotorRight;
   private SparkMax shooterMotorLeader;
 
-  // Built-in NEO encoders
-  // Will be used with Velocity PID
-  private RelativeEncoder shooterEncoderLeft;
-  private RelativeEncoder shooterEncoderRight;
 
   // Necessary for hardware PID with Spark Max
   private SparkClosedLoopController shooterPIDControllerLeft;
   private SparkClosedLoopController shooterPIDControllerRight;
+  private SparkClosedLoopController shooterPIDControllerLeader;
 
-  private InterpolatingDoubleTreeMap SHOOTER_POWER = new InterpolatingDoubleTreeMap();
+  // Built-in NEO encoders
+  // Will be used with Velocity PID
+  private RelativeEncoder shooterEncoderLeft;
+  private RelativeEncoder shooterEncoderRight;
+  private RelativeEncoder shooterEncoderLeader;
+
 
   /** Creates a new ShooterSubsystem. */
   public ShooterSubsystem() {
@@ -80,29 +90,33 @@ public class ShooterSubsystem extends SubsystemBase {
   private void configureshooterMotors(SparkMax motor, RelativeEncoder encoder, SparkClosedLoopController p, ShooterMotorConstantsEnum c,
       SparkMax motorToFollow) {
 
-    motor.restoreFactoryDefaults();
+    SparkMaxConfig sparkMaxConfig = new SparkMaxConfig();
+
+    //motor.restoreFactoryDefaults();
     motor.clearFaults();
     motor.setInverted(c.getShooterMotorInverted());
 
-    motor.setIdleMode(IdleMode.kBrake);
+    sparkMaxConfig.idleMode(IdleMode.kBrake);
 
-    encoder.setPositionConversionFactor(Shooter.POSITION_CONVERSION_FACTOR);
-    encoder.setVelocityConversionFactor(Shooter.VELOCITY_CONVERSION_FACTOR);
+    EncoderConfig encoderConfig = new EncoderConfig();
+    encoderConfig.positionConversionFactor(Shooter.POSITION_CONVERSION_FACTOR);
+    encoderConfig.velocityConversionFactor(Shooter.VELOCITY_CONVERSION_FACTOR);
+    sparkMaxConfig.apply(encoderConfig);
 
     motor.setCANTimeout(0);
 
-    motor.enableVoltageCompensation(Shooter.nominalVoltage);
+    sparkMaxConfig.voltageCompensation(Shooter.nominalVoltage);
 
     if (EnableCurrentLimiter.shooter) {
-      motor.setSmartCurrentLimit(CurrentLimiter.shooter);
+      sparkMaxConfig.smartCurrentLimit(CurrentLimiter.shooter);
     }
     
-    motor.setOpenLoopRampRate(Shooter.rampRate);
-    motor.setClosedLoopRampRate(Shooter.rampRate);
+    sparkMaxConfig.openLoopRampRate(Shooter.rampRate);
+    sparkMaxConfig.closedLoopRampRate(Shooter.rampRate);
 
     // sets which motor is the leader and follower; set follower inversion if needed
     if (c.getShooterMotorFollower()) {
-      motor.follow(motorToFollow,c.getShooterMotorInverted());
+      sparkMaxConfig.follow(motorToFollow,c.getShooterMotorInverted());
 
       motor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 100);
       motor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 250);
@@ -117,15 +131,30 @@ public class ShooterSubsystem extends SubsystemBase {
 
     }
 
-    // PID Controller setup
-    p.setPositionPIDWrappingEnabled(false);
-    p.setP(ShooterPIDConstants.kP);
-    p.setI(ShooterPIDConstants.kI);
-    p.setD(ShooterPIDConstants.kD);
-    p.setIZone(ShooterPIDConstants.Izone);
-    p.setFF(ShooterPIDConstants.kF);
-    // kMaxOutput = 1 ; range is -1, 1
-    p.setOutputRange(-ShooterPIDConstants.kMaxOutput, ShooterPIDConstants.kMaxOutput);
+    ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
+
+    closedLoopConfig.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
+
+    closedLoopConfig.p(ShooterPIDConstants.kP);
+    closedLoopConfig.i(ShooterPIDConstants.kI);
+    closedLoopConfig.d(ShooterPIDConstants.kD);
+    closedLoopConfig.iZone(ShooterPIDConstants.Izone);
+
+    closedLoopConfig.outputRange(-ShooterPIDConstants.kMaxOutput, ShooterPIDConstants.kMaxOutput);
+
+    sparkMaxConfig.apply(closedLoopConfig);
+
+    motor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters)
+
+    // // PID Controller setup
+    // p.setPositionPIDWrappingEnabled(false);
+    // p.setP(ShooterPIDConstants.kP);
+    // p.setI(ShooterPIDConstants.kI);
+    // p.setD(ShooterPIDConstants.kD);
+    // p.setIZone(ShooterPIDConstants.Izone);
+    // p.setFF(ShooterPIDConstants.kF);
+    // // kMaxOutput = 1 ; range is -1, 1
+    // p.setOutputRange(-ShooterPIDConstants.kMaxOutput, ShooterPIDConstants.kMaxOutput);
 
     // kMaxOutput = 1 ; range is -1, 1
     // shooterPIDControllerB.setOutputRange(-Constants.GPMConstants.ShooterPIDConstants.kMaxOutput,
