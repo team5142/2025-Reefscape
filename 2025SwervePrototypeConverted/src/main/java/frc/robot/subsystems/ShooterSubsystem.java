@@ -10,11 +10,11 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.config.ClosedLoopConfig;
 import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.SignalsConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkLowLevel.PeriodicFrame;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.RelativeEncoder;
 
@@ -41,13 +41,11 @@ public class ShooterSubsystem extends SubsystemBase {
   // Necessary for hardware PID with Spark Max
   private SparkClosedLoopController shooterPIDControllerLeft;
   private SparkClosedLoopController shooterPIDControllerRight;
-  private SparkClosedLoopController shooterPIDControllerLeader;
 
   // Built-in NEO encoders
   // Will be used with Velocity PID
   private RelativeEncoder shooterEncoderLeft;
   private RelativeEncoder shooterEncoderRight;
-  private RelativeEncoder shooterEncoderLeader;
 
 
   /** Creates a new ShooterSubsystem. */
@@ -114,22 +112,46 @@ public class ShooterSubsystem extends SubsystemBase {
     sparkMaxConfig.openLoopRampRate(Shooter.rampRate);
     sparkMaxConfig.closedLoopRampRate(Shooter.rampRate);
 
+    SignalsConfig signalsConfig = new SignalsConfig();
+
     // sets which motor is the leader and follower; set follower inversion if needed
     if (c.getShooterMotorFollower()) {
       sparkMaxConfig.follow(motorToFollow,c.getShooterMotorInverted());
 
-      motor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 100);
-      motor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 250);
-      motor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 250);
+      //motor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 100);
+      //motor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 250);
+      //motor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 250);
+
+      // kstatus0
+      signalsConfig.faultsPeriodMs(100);
+      signalsConfig.appliedOutputPeriodMs(100);
+      signalsConfig.outputCurrentPeriodMs(100);
+      
+      // kstatus1
+      signalsConfig.motorTemperaturePeriodMs(250);
+      signalsConfig.primaryEncoderVelocityPeriodMs(250);
+
+      //kstatus2
+      signalsConfig.primaryEncoderPositionPeriodMs(250);
 
     } else {
       shooterMotorLeader = motor;
 
       //motor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 25);
-      motor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 50);
-      motor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 50);
+      //motor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 50);
+      //motor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 50);
+
+      // kstatus1
+      signalsConfig.motorTemperaturePeriodMs(50);
+      signalsConfig.primaryEncoderVelocityPeriodMs(50);
+
+      // kstatus2
+      signalsConfig.primaryEncoderPositionPeriodMs(50);
 
     }
+
+    // apply signals
+    sparkMaxConfig.apply(signalsConfig);
 
     ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
 
@@ -144,7 +166,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     sparkMaxConfig.apply(closedLoopConfig);
 
-    motor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters)
+    motor.configure(sparkMaxConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     // // PID Controller setup
     // p.setPositionPIDWrappingEnabled(false);
@@ -169,7 +191,6 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterMotorLeader.getClosedLoopController().setReference((speed), ControlType.kVelocity);
   }
 
-  // TODO: Modify this
   
   /* 
   public double convertShooterPowerIntoShooterSpeed(double power) {

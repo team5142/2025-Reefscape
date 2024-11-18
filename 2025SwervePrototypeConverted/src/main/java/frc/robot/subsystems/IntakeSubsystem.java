@@ -79,10 +79,6 @@ public class IntakeSubsystem extends SubsystemBase {
     toConfigure.CurrentLimits = currentLimits;
     intakeMotor.getConfigurator().apply(toConfigure);
 */
-
-    // We may not have any encoder on the intake, so no encoder of any kind
-    // TODO: Check if intake motor has encoder
-
     /*
      * intakeMotor.configSelectedFeedbackSensor(FeedbackDevice.
      * CTRE_MagEncoder_Absolute);
@@ -153,7 +149,6 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeMotor.set(0);
   }
 
-  // TODO: This will work using the sensor; modify the code as needed.
   /**
    * Check if note is in the intake
    * If sensor is not present, always return TRUE

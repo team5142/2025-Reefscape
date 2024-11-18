@@ -100,7 +100,7 @@ public class LLVisionSubsystem extends SubsystemBase implements VisionHelpers {
           ) ,
         // Second parameter - pose to point to
         (RobotContainer.isAllianceRed)? autoPoses.RED_SPEAKER_TAG.getPose():autoPoses.BLUE_SPEAKER_TAG.getPose()
-      ).plus(new Rotation2d().fromDegrees(llDirectionCorrection))
+      ).plus(Rotation2d.fromDegrees(llDirectionCorrection))
       ;}
       else { // if you do not see it, do not rotate
         return Rotation2d.fromDegrees(0);

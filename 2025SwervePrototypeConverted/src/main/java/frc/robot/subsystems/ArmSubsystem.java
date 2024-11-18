@@ -15,8 +15,8 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.SignalsConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkLowLevel.PeriodicFrame;
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
@@ -29,8 +29,6 @@ import frc.robot.Constants.GPMConstants.Arm;
 
 import frc.robot.Constants.GPMConstants.Arm.ArmMotorConstantsEnum;
 import frc.robot.Constants.GPMConstants.Arm.ArmPIDConstants;
-
-@SuppressWarnings({ "removal" })
 
 public class ArmSubsystem extends SubsystemBase {
   /** Creates a new GPMSubsystem. */
@@ -46,8 +44,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   private SparkClosedLoopController armPIDControllerLeft;
   private SparkClosedLoopController armPIDControllerRight;
-  private SparkClosedLoopController armPidControllerLeader;
-
+  
   // We wii use built-in NEO encoders for now
   // They're relative, but we can calibrate them based on second Pigeon on the arm
   private RelativeEncoder armEncoderLeft;
@@ -75,8 +72,6 @@ public class ArmSubsystem extends SubsystemBase {
     armMotorLeft = new SparkMax(ArmMotorConstantsEnum.LEFTMOTOR.getArmMotorID(), MotorType.kBrushless);
     armMotorRight = new SparkMax(ArmMotorConstantsEnum.RIGHTMOTOR.getArmMotorID(), MotorType.kBrushless);
 
-    // TODO: We will probably have only one Thru-bore encoder, which is sufficient
-    // for us; revise the code as needed
 
     armPIDControllerLeft = armMotorLeft.getClosedLoopController();
     armPIDControllerRight = armMotorRight.getClosedLoopController();
@@ -143,13 +138,38 @@ public class ArmSubsystem extends SubsystemBase {
     sparkMaxConfig.openLoopRampRate(Arm.rampRate);  // sets the rate to go from 0 to full throttle on open loop
     sparkMaxConfig.closedLoopRampRate(Arm.rampRate);  // sets the rate to go from 0 to full throttle on open loop
 
+
+    SignalsConfig signalsConfig = new SignalsConfig();
+
     // sets which motor is the leader and follower; set follower inversion if needed
     if (c.getArmMotorFollower()) {
       sparkMaxConfig.follow(motorToFollow,c.getArmMotorInverted());
 
-      motor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 100);
-      motor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 250);
-      motor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 250);
+      //motor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 100);
+      //motor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 250);
+      //motor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 250);
+
+      // kstatus0
+      signalsConfig.faultsPeriodMs(100);
+      signalsConfig.appliedOutputPeriodMs(100);
+      signalsConfig.outputCurrentPeriodMs(100);
+
+      // kstatus1
+      signalsConfig.motorTemperaturePeriodMs(250);
+      signalsConfig.primaryEncoderVelocityPeriodMs(250);
+
+      //kstatus2
+      signalsConfig.primaryEncoderPositionPeriodMs(250);
+
+
+      // status frame meaning:
+      //m_drivingSparkMax.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus0, 55);      // Applied *** Output, Faults, Stick Faults, Is Follower
+      //m_drivingSparkMax.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus1, 15);      // Motor Velocity, Motor Tempature, Motor Voltage, Motor Current
+      //m_drivingSparkMax.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus2, 15);      // Motor Position
+      //m_drivingSparkMax.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus3, 65535);   // Analog Sensor Voltage, Velocity, Position
+      //m_drivingSparkMax.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus4, 65535);   // Alternate Encoder Velocity, Position
+      //m_drivingSparkMax.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus5, 65535);   // Duty Cycle Absolute Encoder Position, Absolute Angle
+      //m_drivingSparkMax.SetPeriodicFramePeriod(rev::CANSparkLowLevel::PeriodicFrame::kStatus6, 65565);   // Duty Cycle Absolute Encoder Velocity, Frequency
 
     } else {
 
@@ -157,14 +177,23 @@ public class ArmSubsystem extends SubsystemBase {
 
       armMotorLeader = motor;
       armEncoderLeader = motor.getEncoder();
-      armPidControllerLeader = p;
 
       //motor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 25);
-      motor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 50);
-      motor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 50);
+      //motor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 50);
+      //motor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 50);
+
+      // kstatus1
+      signalsConfig.motorTemperaturePeriodMs(50);
+      signalsConfig.primaryEncoderVelocityPeriodMs(50);
+
+      // kstatus2
+      signalsConfig.primaryEncoderPositionPeriodMs(50);
 
 
     }
+
+    // apply signals
+    sparkMaxConfig.apply(signalsConfig);
 
     ClosedLoopConfig closedLoopConfig = new ClosedLoopConfig();
     // --- PID Setup
@@ -299,7 +328,6 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void armHoldPosition() {
-    // TODO: this will depend on the angle; need to calibrate
     armMotorLeader.set(0);
   }
 
