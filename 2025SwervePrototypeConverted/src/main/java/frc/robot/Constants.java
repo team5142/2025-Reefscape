@@ -12,7 +12,7 @@ import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
-import com.ctre.phoenix6.swerve.SwerveModule.ClosedLoopOutputType;
+import com.ctre.phoenix6.swerve.SwerveModuleConstants.ClosedLoopOutputType;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerFeedbackType;
 
@@ -110,7 +110,7 @@ public final class Constants {
       private static final double kDriveFrictionVoltage = 0.25;
 
       public static final SwerveDrivetrainConstants DrivetrainConstants = new SwerveDrivetrainConstants()
-          .withCANbusName(kCANbusName)
+          .withCANBusName(kCANbusName)
           .withPigeon2Id(IMUConstants.kPigeonId)
           .withPigeon2Configs(IMUConstants.pigeonConfigs);
 
@@ -123,7 +123,7 @@ public final class Constants {
           .withDriveMotorGains(driveGains)
           .withSteerMotorClosedLoopOutput(steerClosedLoopOutput)
           .withDriveMotorClosedLoopOutput(driveClosedLoopOutput)
-          .withSpeedAt12VoltsMps(kSpeedAt12VoltsMps)
+          .withSpeedAt12Volts(kSpeedAt12VoltsMps)
           .withSteerInertia(kSteerInertia)
           .withDriveInertia(kDriveInertia)
           .withSteerFrictionVoltage(kSteerFrictionVoltage)
