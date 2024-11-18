@@ -69,7 +69,7 @@ public class DriveSubsystem extends SwerveDrivetrain implements Subsystem {
            Seconds.of(50)),
           new SysIdRoutine.Mechanism(
               // Tell SysId how to plumb the driving voltage to the motor(s).
-              (Measure<Voltage> volts) -> {
+              (Voltage volts) -> {
                         this.turnToAngleWithVolt(volts.in(Volts));
                 },
               // Tell SysId how to record a frame of data for each motor on the mechanism being
