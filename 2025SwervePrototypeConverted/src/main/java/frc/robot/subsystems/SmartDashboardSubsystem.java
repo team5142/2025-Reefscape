@@ -25,7 +25,7 @@ public class SmartDashboardSubsystem extends SubsystemBase {
 
   public void updateChassisTelemetry() {
     SmartDashboard.putString("Chassis Pose", RobotContainer.driveSubsystem.getPose().toString());
-    SmartDashboard.putString("Chassis Velocity", RobotContainer.driveSubsystem.getState().speeds.toString());
+    SmartDashboard.putString("Chassis Velocity", RobotContainer.driveSubsystem.getState().Speeds.toString());
   }
 
   public void updateIMUTelemetry() {

@@ -183,7 +183,7 @@ public class DriveSubsystem extends SwerveDrivetrain implements Subsystem {
   }
 
   public ChassisSpeeds getChassisSpeeds() {
-    return this.getState().speeds;
+    return this.getState().Speeds;
   }
 
   public void driveWithChassisSpeeds(ChassisSpeeds speeds) {
@@ -371,7 +371,7 @@ public class DriveSubsystem extends SwerveDrivetrain implements Subsystem {
    * @return The turn rate of the robot, in degrees per second
    */
   public double getTurnRate() {
-    return -imu.getRate();
+    return imu.getAngularVelocityZWorld().getValueAsDouble(); // getAngularVelocityZWorld - CCW+
   }
 
   /**
@@ -405,9 +405,10 @@ public class DriveSubsystem extends SwerveDrivetrain implements Subsystem {
     System.out.println("Final pose: " + this.getPose());
     System.out.println(
         "Restoring original IMU after trajectory " + (this.getPose().getRotation().getDegrees() + trajectoryAdjustmentIMU));
-    this.seedFieldRelative(
+    this.resetPose(
       new Pose2d(0, 0, 
-        new Rotation2d().fromDegrees(this.getPose().getRotation().getDegrees() + trajectoryAdjustmentIMU)));
+        Rotation2d.fromDegrees(this.getPose().getRotation().getDegrees() + trajectoryAdjustmentIMU))
+        );
   }
 
   /**
@@ -416,9 +417,11 @@ public class DriveSubsystem extends SwerveDrivetrain implements Subsystem {
    * start of the trajectory.
    * Be aware that on-going odometry updates use IMU. So, your odometry yaw may change incorrectly
    * later if the current yaw is not reset properly on the IMU first.
+   * 
+   * Note that the pose is from Blue Alliance perspective
    */
   public void resetOdometry(Pose2d pose) {
-    this.seedFieldRelative(pose);
+    this.resetPose(pose);
   }
 
   /* Accept the swerve drive state and telemeterize it to smartdashboard */
@@ -438,7 +441,7 @@ public class DriveSubsystem extends SwerveDrivetrain implements Subsystem {
   }
 
   public double getAngularVelocity() {
-    return this.getState().speeds.omegaRadiansPerSecond;
+    return this.getState().Speeds.omegaRadiansPerSecond;
   }
 
   @Override
