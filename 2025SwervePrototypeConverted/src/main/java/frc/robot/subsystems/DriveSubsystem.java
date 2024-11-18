@@ -18,11 +18,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import static edu.wpi.first.units.Units.Volts;
 import static edu.wpi.first.units.Units.Seconds;
+import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 
 import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.TimeUnit;
 import edu.wpi.first.units.VoltageUnit;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -39,7 +40,6 @@ import frc.robot.Constants.SwerveConstants.TunerConstants;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.SwerveConstants.SwerveChassis.SwerveModuleConstantsEnum;
-import frc.robot.Constants.SwerveConstants.SwerveChassis;
 
 public class DriveSubsystem extends SwerveDrivetrain implements Subsystem {
 
@@ -64,7 +64,7 @@ public class DriveSubsystem extends SwerveDrivetrain implements Subsystem {
   private final SysIdRoutine mSysIdRoutine = 
     new SysIdRoutine(
           // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
-          new SysIdRoutine.Config(Volts.of(0.1).per(Seconds.of(1)),
+          new SysIdRoutine.Config(Volts.of(0.1).per(Second),
            Volts.of(0.1),
            Seconds.of(50)),
           new SysIdRoutine.Mechanism(
