@@ -6,13 +6,11 @@ package frc.robot;
 
 import frc.robot.Constants.GPMConstants.Arm;
 import frc.robot.Constants.OIConstants.ControllerDevice;
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.SwerveConstants.Intake;
 import frc.robot.Constants.VisionConstants.PhotonVisionConstants;
 import frc.robot.commands.ArmDownToIntake;
 import frc.robot.commands.ArmHoldCurrentPositionWithPID;
 import frc.robot.commands.ArmRelease;
-import frc.robot.commands.ArmStop;
 import frc.robot.commands.ArmTurnToAngle;
 import frc.robot.commands.AutonomousTrajectory2Poses;
 import frc.robot.commands.DriveManuallyCommand;
@@ -21,13 +19,7 @@ import frc.robot.commands.IntakeRun;
 import frc.robot.commands.IntakeStop;
 import frc.robot.commands.NotePickupCamera;
 import frc.robot.commands.RunTrajectorySequenceRobotAtStartPoint;
-import frc.robot.commands.ShootUsingLL;
-import frc.robot.commands.ShootUsingLLAndTurn;
 import frc.robot.commands.ShooterStop;
-import frc.robot.commands.ShootingAmpPostSequence;
-import frc.robot.commands.ShootingAmpPreSequence;
-import frc.robot.commands.ShootingAmpSequence;
-import frc.robot.commands.ShootingGPM0Sequence;
 import frc.robot.commands.ShootingSequenceManual;
 import frc.robot.commands.StopRobot;
 import frc.robot.commands.TurnToRelativeAngleSoftwarePIDCommand;
@@ -44,7 +36,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -189,7 +180,7 @@ public class RobotContainer {
       .onFalse(new StopRobot());
   }
 
-  public void testAuto() {
+  public void testAuto() throws Exception {
     new JoystickButton(xboxDriveController, 2)
       .onTrue(new RunTrajectorySequenceRobotAtStartPoint("OneMeterForward"))
       .onFalse(new StopRobot());
