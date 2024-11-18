@@ -12,8 +12,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.SwerveConstants.Intake;
 
-@SuppressWarnings({ "removal" })
-
 public class IntakeSubsystem extends SubsystemBase {
 
   // 775 connected to TalonSRX
