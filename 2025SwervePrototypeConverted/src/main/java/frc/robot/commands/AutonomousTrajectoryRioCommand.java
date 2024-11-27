@@ -11,6 +11,7 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.CurrentLimiter;
@@ -48,8 +49,11 @@ public class AutonomousTrajectoryRioCommand extends FollowPathCommand{
                         1
                     ),
 
-                    SwerveChassis.TRACK_WIDTH,
-                    SwerveChassis.WHEEL_BASE
+                    new Translation2d(SwerveChassis.WHEEL_BASE / 2.0,SwerveChassis.TRACK_WIDTH / 2.0),
+                    new Translation2d(SwerveChassis.WHEEL_BASE / 2.0,-SwerveChassis.TRACK_WIDTH / 2.0),
+                    new Translation2d(-SwerveChassis.WHEEL_BASE / 2.0,SwerveChassis.TRACK_WIDTH / 2.0),
+                    new Translation2d(-SwerveChassis.WHEEL_BASE / 2.0,-SwerveChassis.TRACK_WIDTH / 2.0)
+
             ),
             ()->{return false;}, // shouldFlipPath
             RobotContainer.driveSubsystem // subsystem requirement

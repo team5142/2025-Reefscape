@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.*;
+
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain;
@@ -38,7 +40,7 @@ public class DriveSubsystem extends SwerveDrivetrain implements Subsystem {
   /* Keep track if we've ever applied the operator perspective before or not */
   private boolean hasAppliedOperatorPerspective = false;
 
-    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+  private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
       .withDeadband(SwerveChassis.MaxSpeed * 0.1).withRotationalDeadband(SwerveChassis.MaxAngularRate * 0.1) // Add a 10% deadband
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
                                                                // driving in open loop
@@ -112,44 +114,52 @@ public class DriveSubsystem extends SwerveDrivetrain implements Subsystem {
             SwerveModuleConstantsEnum.MOD0.getAngleMotorID(),
             SwerveModuleConstantsEnum.MOD0.getDriveMotorID(),
             SwerveModuleConstantsEnum.MOD0.getCancoderID(),
-            SwerveModuleConstantsEnum.MOD0.getAngleOffset(),
-            SwerveChassis.WHEEL_BASE / 2.0,
-            SwerveChassis.TRACK_WIDTH / 2.0,
+            Rotations.of(SwerveModuleConstantsEnum.MOD0.getAngleOffset()),
+            Meters.of(SwerveChassis.WHEEL_BASE / 2.0),
+            Meters.of(SwerveChassis.TRACK_WIDTH / 2.0),
             SwerveModuleConstantsEnum.MOD0.isDriveMotorInverted(),
-            SwerveModuleConstantsEnum.MOD0.isAngleMotorInverted())
+            SwerveModuleConstantsEnum.MOD0.isAngleMotorInverted(),
+            SwerveModuleConstantsEnum.MOD0.isCANCoderIverted()
+            )
             ,
 
         TunerConstants.ConstantCreator.createModuleConstants(
             SwerveModuleConstantsEnum.MOD1.getAngleMotorID(),
             SwerveModuleConstantsEnum.MOD1.getDriveMotorID(),
             SwerveModuleConstantsEnum.MOD1.getCancoderID(),
-            SwerveModuleConstantsEnum.MOD1.getAngleOffset(),
-            SwerveChassis.WHEEL_BASE / 2.0,
-            -SwerveChassis.TRACK_WIDTH / 2.0,
+            Rotations.of(SwerveModuleConstantsEnum.MOD1.getAngleOffset()),
+            Meters.of(SwerveChassis.WHEEL_BASE / 2.0),
+            Meters.of(-SwerveChassis.TRACK_WIDTH / 2.0),
             SwerveModuleConstantsEnum.MOD1.isDriveMotorInverted(),
-            SwerveModuleConstantsEnum.MOD1.isAngleMotorInverted())
+            SwerveModuleConstantsEnum.MOD1.isAngleMotorInverted(),
+            SwerveModuleConstantsEnum.MOD1.isCANCoderIverted()
+            )
             ,
 
         TunerConstants.ConstantCreator.createModuleConstants(
             SwerveModuleConstantsEnum.MOD2.getAngleMotorID(),
             SwerveModuleConstantsEnum.MOD2.getDriveMotorID(),
             SwerveModuleConstantsEnum.MOD2.getCancoderID(),
-            SwerveModuleConstantsEnum.MOD2.getAngleOffset(),
-            -SwerveChassis.WHEEL_BASE / 2.0,
-            SwerveChassis.TRACK_WIDTH / 2.0,
+            Rotations.of(SwerveModuleConstantsEnum.MOD2.getAngleOffset()),
+            Meters.of(-SwerveChassis.WHEEL_BASE / 2.0),
+            Meters.of(SwerveChassis.TRACK_WIDTH / 2.0),
             SwerveModuleConstantsEnum.MOD2.isDriveMotorInverted(),
-            SwerveModuleConstantsEnum.MOD2.isAngleMotorInverted())
+            SwerveModuleConstantsEnum.MOD2.isAngleMotorInverted(),
+            SwerveModuleConstantsEnum.MOD2.isCANCoderIverted()
+            )
             ,
 
         TunerConstants.ConstantCreator.createModuleConstants(
             SwerveModuleConstantsEnum.MOD3.getAngleMotorID(),
             SwerveModuleConstantsEnum.MOD3.getDriveMotorID(),
             SwerveModuleConstantsEnum.MOD3.getCancoderID(),
-            SwerveModuleConstantsEnum.MOD3.getAngleOffset(),
-            -SwerveChassis.WHEEL_BASE / 2.0,
-            -SwerveChassis.TRACK_WIDTH / 2.0,
+            Rotations.of(SwerveModuleConstantsEnum.MOD3.getAngleOffset()),
+            Meters.of(-SwerveChassis.WHEEL_BASE / 2.0),
+            Meters.of(-SwerveChassis.TRACK_WIDTH / 2.0),
             SwerveModuleConstantsEnum.MOD3.isDriveMotorInverted(),
-            SwerveModuleConstantsEnum.MOD3.isAngleMotorInverted())
+            SwerveModuleConstantsEnum.MOD3.isAngleMotorInverted(),
+            SwerveModuleConstantsEnum.MOD3.isCANCoderIverted()
+            )
     };
   }
 
