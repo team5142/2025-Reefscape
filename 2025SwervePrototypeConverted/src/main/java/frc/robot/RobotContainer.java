@@ -75,7 +75,7 @@ public class RobotContainer {
   //     new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
+  public RobotContainer(){ 
     // Configure driver interface - binding joystick objects to port numbers
     configureDriverInterface();
 
@@ -100,14 +100,20 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  private void configureBindings() {
+  private void configureBindings()  {
     // testAutoOdometry();
     // testCharacterization();
     //testTurn();
     //allTestCommandsGPM();
     // testAutoOdometry();
-    // allTestCommandsDrive();
-    testNotePickup();
+    //allTestCommandsDrive();
+    //testNotePickup();
+    try {
+      testAuto();
+    }
+    catch (Exception e) {
+      System.out.println("test auto error: " + e);
+    }
 
   }
 

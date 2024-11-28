@@ -265,7 +265,7 @@ public final class Constants {
 					this.angleOffset = o;
 					this.driveMotorInverted = di;
 					this.angleMotorInverted = ai;
-					this.cancoderInverted = ai;
+					this.cancoderInverted = ci;
 				}
 
 				public int getDriveMotorID() {
