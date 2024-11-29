@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -60,25 +61,35 @@ public class RunTrajectorySequenceRobotAtStartPoint extends SequentialCommandGro
     // Read the trajectory from a file
     this.trajectoryPath = traj;
 
-    addCommands(
-        // new InstantCommand(RobotContainer.driveSubsystem::zeroDriveEncoders),
-        new PrintCommand("****Starting trajectory****"),
-        // new WaitCommand(0.4),
-        new InstantCommand(() -> RobotContainer.driveSubsystem
-            .setYawForTrajectory(trajectoryPath.getStartingHolonomicPose().orElse(new Pose2d()).getRotation().getDegrees())),
-        new InstantCommand(() -> RobotContainer.driveSubsystem.resetOdometry(trajectoryPath.getStartingHolonomicPose().orElse(new Pose2d()))),
-        // new PrintCommand(
-        // "START IX:" + trajectoryPath.getInitialPose().getX()+
-        // " IY:" + trajectoryPath.getInitialPose().getY()+
-        // " IA:" + trajectoryPath.getInitialPose().getRotation().getDegrees()
-        // ), // Set the initial pose of the robot to the one in a trajectory
-        new AutonomousTrajectoryRioCommand(trajectoryPath)
-        //, // Run a trajectory
-        .finallyDo (
-          () -> RobotContainer.driveSubsystem.restoreYawAfterTrajectory()
-        )
-        ,
-        new PrintCommand("****End trajectory****"));
+    RobotConfig robotConfig;
+
+    try {
+      robotConfig = RobotConfig.fromGUISettings();
+      addCommands(
+          // new InstantCommand(RobotContainer.driveSubsystem::zeroDriveEncoders),
+          new PrintCommand("****Starting trajectory****"),
+          // new WaitCommand(0.4),
+          new InstantCommand(() -> RobotContainer.driveSubsystem
+              .setYawForTrajectory(trajectoryPath.getStartingHolonomicPose().orElse(new Pose2d()).getRotation().getDegrees())),
+          new InstantCommand(() -> RobotContainer.driveSubsystem.resetOdometry(trajectoryPath.getStartingHolonomicPose().orElse(new Pose2d()))),
+          // new PrintCommand(
+          // "START IX:" + trajectoryPath.getInitialPose().getX()+
+          // " IY:" + trajectoryPath.getInitialPose().getY()+
+          // " IA:" + trajectoryPath.getInitialPose().getRotation().getDegrees()
+          // ), // Set the initial pose of the robot to the one in a trajectory
+          new AutonomousTrajectoryRioCommand(trajectoryPath, robotConfig)
+          //, // Run a trajectory
+          .finallyDo (
+            () -> RobotContainer.driveSubsystem.restoreYawAfterTrajectory()
+          )
+          ,
+          new PrintCommand("****End trajectory****")
+      );
+    } catch (Exception e) {
+      addCommands(
+        new PrintCommand("****Could not read the RobotConfig from GUI settings****")
+      );
+    }
   }
 
 }

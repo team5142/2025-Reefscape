@@ -326,7 +326,7 @@ public final class Constants {
 	}
 
 	public static final class CurrentLimiter {
-		public static int drive = 45;
+		public static int drive = 60;
 		public static int intake = 0;
 		public static int arm = 40;
 		public static int shooter = 40;
