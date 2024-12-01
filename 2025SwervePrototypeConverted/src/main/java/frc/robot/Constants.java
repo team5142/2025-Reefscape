@@ -101,7 +101,7 @@ public final class Constants {
 			// This may need to be tuned to your individual robot
 			private static final double kCoupleRatio = 3.5714285714285716;
 
-			private static final double kDriveGearRatio = 6.122448979591837;
+			private static final double kDriveGearRatio = 6.122448979591837 * (1/2.09);
 			private static final double kSteerGearRatio = 21.428571428571427;
 			private static final Distance wheelRadius = Inches.of(5.33 / 5.71);
 
@@ -180,9 +180,10 @@ public final class Constants {
 			 * trajectory with PathPlanner
 			 * even if a trajectory includes a holonomic component.
 			 */
-			public static final double DRIVE_CHASSIS_KP = 3.5;
+			//public static final double DRIVE_CHASSIS_KP = 3.5;
+			public static final double DRIVE_CHASSIS_KP = 5.0;
 			public static final double DRIVE_CHASSIS_KI = 0.00;
-			public static final double DRIVE_CHASSIS_KD = 0.1;
+			public static final double DRIVE_CHASSIS_KD = 0;
 
 			/**
 			 * Angle Motor PID. Assumed to be the same for all angle motors

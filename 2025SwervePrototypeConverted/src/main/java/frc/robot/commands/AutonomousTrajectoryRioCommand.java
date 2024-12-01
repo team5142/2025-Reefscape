@@ -76,6 +76,7 @@ public class AutonomousTrajectoryRioCommand extends FollowPathCommand {
     @Override
     public void execute() {
         super.execute();
+        System.out.println("cp: " + RobotContainer.driveSubsystem.getPose());
     }
 
     // Called once the command ends or is interrupted.
