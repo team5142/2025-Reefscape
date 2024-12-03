@@ -196,9 +196,18 @@ public class RobotContainer {
     new JoystickButton(xboxDriveController, 4)
       .onTrue(new RunTrajectorySequenceRobotAtStartPoint("Turn90"))
       .onFalse(new StopRobot());
+    // new JoystickButton(xboxDriveController, 6)
+    //   .onTrue(new RunTrajectorySequenceRobotAtStartPoint("FourMeterForward"))
+    //   .onFalse(new StopRobot());
+
+    // new JoystickButton(xboxDriveController, 6)
+    //   .onTrue(new RunTrajectorySequenceRobotAtStartPoint("OneMeterDiagonal"))
+    //   .onFalse(new StopRobot());
+
     new JoystickButton(xboxDriveController, 6)
-      .onTrue(new RunTrajectorySequenceRobotAtStartPoint("FourMeterForward"))
+      .onTrue(new RunTrajectorySequenceRobotAtStartPoint("2MeterForward90Degrees"))
       .onFalse(new StopRobot());
+
 
     new JoystickButton(xboxDriveController, 5)
       .onTrue(new AutonomousTrajectory2Poses(new Pose2d(1, 1, new Rotation2d(0)), 
