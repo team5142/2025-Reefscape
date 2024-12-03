@@ -9,6 +9,7 @@ import frc.robot.Constants.OIConstants.ControllerDevice;
 import frc.robot.Constants.SwerveConstants.Intake;
 import frc.robot.Constants.VisionConstants.PhotonVisionConstants;
 import frc.robot.commands.ArmDownToIntake;
+import frc.robot.commands.ArmDownToNoteVision;
 import frc.robot.commands.ArmHoldCurrentPositionWithPID;
 import frc.robot.commands.ArmRelease;
 import frc.robot.commands.ArmTurnToAngle;
@@ -107,13 +108,13 @@ public class RobotContainer {
     //allTestCommandsGPM();
     // testAutoOdometry();
     //allTestCommandsDrive();
-    //testNotePickup();
-    try {
-      testAuto();
-    }
-    catch (Exception e) {
-      System.out.println("test auto error: " + e);
-    }
+    testNotePickup();
+    // try {
+    //   testAuto();
+    // }
+    // catch (Exception e) {
+    //   System.out.println("test auto error: " + e);
+    // }
 
   }
 
@@ -166,6 +167,18 @@ public class RobotContainer {
     new JoystickButton(xboxDriveController, 1) // Button A - double-check
             .onTrue(new NotePickupCamera())
             .onFalse(new StopRobot());
+    
+    new JoystickButton(xboxDriveController, 3)
+            .onTrue(new ArmDownToNoteVision())
+            .onFalse(new ArmRelease());
+                    
+    new JoystickButton(xboxDriveController, 4)
+            .onTrue(new InstantCommand(()->RobotContainer.armSubsystem.runArmMotors(-0.2)))
+            .onFalse(new ArmRelease());
+    
+    new JoystickButton(xboxDriveController, 5)
+            .onTrue(new InstantCommand(()->RobotContainer.armSubsystem.runArmMotors(0.2)))
+            .onFalse(new ArmRelease());
     
     new JoystickButton(xboxDriveController, 2) // Button B - double-check
             .onTrue(new TurnToRelativeAngleTrapezoidProfile(20, () -> driveSubsystem.getYaw()))

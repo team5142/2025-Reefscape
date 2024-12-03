@@ -32,10 +32,16 @@ public class SmartDashboardSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("IMU Yaw", RobotContainer.driveSubsystem.getYaw());
   }
 
+  public void updateArmTelemetry() {
+    SmartDashboard.putNumber("Arm Pitch", RobotContainer.armSubsystem.getArmIMUPitch());
+    SmartDashboard.putNumber("Arm Leader Encoder", RobotContainer.armSubsystem.getLeftArmMotorEncoder());
+  }
+
   public void updateAllDisplays(){
     updateIMUTelemetry();
     updateChassisTelemetry();
     updateOdometryTelemetry();
+    updateArmTelemetry();
   }
 
 
