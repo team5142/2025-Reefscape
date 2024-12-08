@@ -69,6 +69,8 @@ public class IntakeSubsystem extends SubsystemBase {
     // Configure motor and controller
     motorconfigs.Inverted = (Intake.INTAKE_INVERTED ? InvertedValue.CounterClockwise_Positive: InvertedValue.Clockwise_Positive);
 
+    var talonFXConfigurator = intakeMotor.getConfigurator();
+    talonFXConfigurator.apply(motorconfigs);
 /* 
     TalonFXConfiguration toConfigure = new TalonFXConfiguration();
     currentLimits.SupplyCurrentLimit = 40; // Limit to 40 amps

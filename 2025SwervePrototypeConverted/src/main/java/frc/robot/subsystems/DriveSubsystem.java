@@ -164,7 +164,7 @@ public class DriveSubsystem extends SwerveDrivetrain implements Subsystem {
   }
 
   public void drive(double xVelocity_m_per_s, double yVelocity_m_per_s, double omega_rad_per_s) {
-    //System.out.println("o:" + omega_rad_per_s/SwerveChassis.MaxAngularRate);
+    //System.out.println("X: " + xVelocity_m_per_s + " y: " + yVelocity_m_per_s + " o:" + omega_rad_per_s/SwerveChassis.MaxAngularRate);
     this.setControl(
       drive.withVelocityX(xVelocity_m_per_s)
         .withVelocityY(yVelocity_m_per_s)
