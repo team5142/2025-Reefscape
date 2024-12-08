@@ -92,7 +92,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     //motor.restoreFactoryDefaults();
     motor.clearFaults();
-    motor.setInverted(c.getShooterMotorInverted());
+    sparkMaxConfig.inverted(c.getShooterMotorInverted());
 
     sparkMaxConfig.idleMode(IdleMode.kBrake);
 

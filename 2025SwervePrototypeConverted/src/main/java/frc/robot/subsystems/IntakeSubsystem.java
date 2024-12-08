@@ -5,8 +5,10 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -63,8 +65,9 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeMotor.getConfigurator().apply(new TalonFXConfiguration()); // reset the motor to defaults
     intakeMotor.setSafetyEnabled(false);
 
+    var motorconfigs = new MotorOutputConfigs();
     // Configure motor and controller
-    intakeMotor.setInverted(Intake.INTAKE_INVERTED);
+    motorconfigs.Inverted = (Intake.INTAKE_INVERTED ? InvertedValue.CounterClockwise_Positive: InvertedValue.Clockwise_Positive);
 
 /* 
     TalonFXConfiguration toConfigure = new TalonFXConfiguration();

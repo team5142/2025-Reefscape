@@ -118,7 +118,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     //motor.restoreFactoryDefaults(); //restores the state of the motor to factory defaults
     motor.clearFaults();  //clears a fault that has occurred since the last time the faults were reset
-    motor.setInverted(c.getArmMotorInverted()); //sets motor inverted if getArmMotorInverted() returns true
+    sparkMaxConfig.inverted(c.getArmMotorInverted()); //sets motor inverted if getArmMotorInverted() returns true
 
     sparkMaxConfig.idleMode(IdleMode.kBrake); //sets motor into brake mode
     //motor.setIdleMode(IdleMode.kCoast); 
