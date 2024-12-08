@@ -10,6 +10,7 @@ import frc.robot.Constants.SwerveConstants.Intake;
 import frc.robot.Constants.VisionConstants.PhotonVisionConstants;
 import frc.robot.commands.ArmDownToIntake;
 import frc.robot.commands.ArmDownToNoteVision;
+import frc.robot.commands.ArmDownToNoteVisionForAutoNotePickup;
 import frc.robot.commands.ArmHoldCurrentPositionWithPID;
 import frc.robot.commands.ArmRelease;
 import frc.robot.commands.ArmTurnToAngle;
@@ -169,7 +170,7 @@ public class RobotContainer {
             .onFalse(new StopRobot());
     
     new JoystickButton(xboxDriveController, 3)
-            .onTrue(new ArmDownToNoteVision())
+            .onTrue(new ArmDownToNoteVisionForAutoNotePickup())
             .onFalse(new ArmRelease());
                     
     new JoystickButton(xboxDriveController, 4)
