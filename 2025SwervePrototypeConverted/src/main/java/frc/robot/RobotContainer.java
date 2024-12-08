@@ -109,13 +109,13 @@ public class RobotContainer {
     //allTestCommandsGPM();
     // testAutoOdometry();
     //allTestCommandsDrive();
-    testNotePickup();
-    // try {
-    //   testAuto();
-    // }
-    // catch (Exception e) {
-    //   System.out.println("test auto error: " + e);
-    // }
+    //testNotePickup();
+    try {
+      testAuto();
+    }
+    catch (Exception e) {
+      System.out.println("test auto error: " + e);
+    }
 
   }
 

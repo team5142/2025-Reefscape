@@ -213,7 +213,7 @@ public final class Constants {
 						2, // angleMotorID
 						20, // CanCoder Id
 						// -0.296142578125, // angleOffset of cancoder to mark zero-position
-						-0.296142578125 + 0.013672, // angleOffset of cancoder to mark zero-position
+						-0.296142578125 + 0.013672 + Math.PI, // angleOffset of cancoder to mark zero-position
 						false, // Inversion for drive motor
 						true, // Inversion for angle motor
 						false // inversion for CANcoder
@@ -223,7 +223,7 @@ public final class Constants {
 						4, // angleMotorID
 						21, // CanCoder Id
 						// 0.041015625, // angleOffset of cancoder to mark zero-position
-						0.029541015625, // angleOffset of cancoder to mark zero-position
+						0.029541015625 + Math.PI, // angleOffset of cancoder to mark zero-position
 						true, // Inversion for drive motor
 						true, // Inversion for angle motor
 						false // inversion for CANcoder
@@ -233,7 +233,7 @@ public final class Constants {
 						6, // angleMotorID
 						22, // CanCoder Id
 						// -0.296142578125, // angleOffset of cancoder to mark zero-position
-						0.326171875 - 0.009033, // angleOffset of cancoder to mark zero-position
+						0.326171875 - 0.009033 + Math.PI, // angleOffset of cancoder to mark zero-position
 						false, // Inversion for drive motor
 						true, // Inversion for angle motor
 						false // inversion for CANcoder
@@ -244,7 +244,7 @@ public final class Constants {
 						23, // CanCoder Id
 						// 0.326171875, // angleOffset of cancoder to mark zero-position
 						//0.0576171875, // angleOffset of cancoder to mark zero-position
-						0.044677734375, // angleOffset of cancoder to mark zero-position
+						0.044677734375 + Math.PI, // angleOffset of cancoder to mark zero-position
 						true, // Inversion for drive motor
 						true, // Inversion for angle motor
 						false // inversion for CANcoder
