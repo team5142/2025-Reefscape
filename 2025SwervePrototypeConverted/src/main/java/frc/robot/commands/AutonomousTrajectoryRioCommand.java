@@ -8,6 +8,8 @@ package frc.robot.commands;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.path.PathPlannerPath;
 
+import edu.wpi.first.wpilibj.DriverStation;
+
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
@@ -57,7 +59,7 @@ public class AutonomousTrajectoryRioCommand extends FollowPathCommand {
             ),
             */
             robotConfig,
-            ()->{return false;}, // shouldFlipPath
+            ()->{return RobotContainer.isAllianceRed;}, // shouldFlipPath - only on red side
             RobotContainer.driveSubsystem // subsystem requirement
         );
     }
