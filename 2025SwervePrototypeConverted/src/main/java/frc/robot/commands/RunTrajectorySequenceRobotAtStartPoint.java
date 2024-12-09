@@ -60,6 +60,7 @@ public class RunTrajectorySequenceRobotAtStartPoint extends SequentialCommandGro
 
     // Read the trajectory from a file
     this.trajectoryPath = traj;
+    PathPlannerPath drivePath = (RobotContainer.isAllianceRed)?trajectoryPath.flipPath():trajectoryPath;
 
     RobotConfig robotConfig;
 
@@ -70,14 +71,14 @@ public class RunTrajectorySequenceRobotAtStartPoint extends SequentialCommandGro
           new PrintCommand("****Starting trajectory****"),
           // new WaitCommand(0.4),
           new InstantCommand(() -> RobotContainer.driveSubsystem
-              .setYawForTrajectory(trajectoryPath.getStartingHolonomicPose().orElse(new Pose2d()).getRotation().getDegrees())),
-          new InstantCommand(() -> RobotContainer.driveSubsystem.resetOdometry(trajectoryPath.getStartingHolonomicPose().orElse(new Pose2d()))),
+              .setYawForTrajectory(drivePath.getStartingHolonomicPose().orElse(new Pose2d()).getRotation().getDegrees())),
+          new InstantCommand(() -> RobotContainer.driveSubsystem.resetOdometry(drivePath.getStartingHolonomicPose().orElse(new Pose2d()))),
           // new PrintCommand(
           // "START IX:" + trajectoryPath.getInitialPose().getX()+
           // " IY:" + trajectoryPath.getInitialPose().getY()+
           // " IA:" + trajectoryPath.getInitialPose().getRotation().getDegrees()
           // ), // Set the initial pose of the robot to the one in a trajectory
-          new AutonomousTrajectoryRioCommand(trajectoryPath, robotConfig)
+          new AutonomousTrajectoryRioCommand(drivePath, robotConfig) 
           //, // Run a trajectory
           .finallyDo (
             () -> RobotContainer.driveSubsystem.restoreYawAfterTrajectory()

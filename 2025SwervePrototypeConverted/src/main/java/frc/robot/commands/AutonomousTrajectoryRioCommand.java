@@ -59,7 +59,7 @@ public class AutonomousTrajectoryRioCommand extends FollowPathCommand {
             ),
             */
             robotConfig,
-            ()->{return RobotContainer.isAllianceRed;}, // shouldFlipPath - only on red side
+            ()->{return false;}, // shouldFlipPath - only on red side
             RobotContainer.driveSubsystem // subsystem requirement
         );
     }
