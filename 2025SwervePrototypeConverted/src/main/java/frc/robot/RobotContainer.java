@@ -105,11 +105,11 @@ public class RobotContainer {
   private void configureBindings()  {
     // testAutoOdometry();
     // testCharacterization();
-    //testTurn();
+    testTurn();
     //allTestCommandsGPM();
     // testAutoOdometry();
     //allTestCommandsDrive();
-    testNotePickup();
+    //testNotePickup();
     // try {
     //   testAuto();
     // }
@@ -196,7 +196,7 @@ public class RobotContainer {
 
   private void testTurn() {
     new JoystickButton(xboxDriveController, 1)
-      .onTrue(new TurnToRelativeAngleSoftwarePIDCommand(()->new Rotation2d().fromDegrees(25)))
+      .onTrue(new TurnToRelativeAngleSoftwarePIDCommand(()->new Rotation2d().fromDegrees(1.5)))
       .onFalse(new StopRobot());
   }
 

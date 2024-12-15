@@ -14,10 +14,10 @@ import frc.robot.Constants.SwerveConstants.SwerveChassis;
 public class TurnToRelativeAngleSoftwarePIDCommand extends Command {
 
 	// Software PID turn constants
-	private final double kP = 6.0;//1.5958;
-	private final double kI = 0.02;
-	private final double kD = 0.0;
-	private final double minOmega = 10.0;
+	private final double kP = 7.0;//1.5958;
+	private final double kI = 0.04;
+	private final double kD = 0;
+	private final double minOmega = 18.0;
 	Rotation2d angle;
 	Supplier<Rotation2d> angleSupplier;
 	private double kMaxSpeed = SwerveChassis.MaxAngularRate*0.5; // radians per second
