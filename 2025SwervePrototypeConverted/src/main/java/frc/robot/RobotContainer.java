@@ -105,7 +105,7 @@ public class RobotContainer {
   private void configureBindings()  {
     // testAutoOdometry();
     // testCharacterization();
-    testTurn();
+    //testTurn();
     //allTestCommandsGPM();
     // testAutoOdometry();
     //allTestCommandsDrive();
