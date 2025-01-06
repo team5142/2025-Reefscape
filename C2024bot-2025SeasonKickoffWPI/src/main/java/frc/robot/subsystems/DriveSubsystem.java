@@ -18,12 +18,6 @@ import com.pathplanner.lib.util.DriveFeedforwards;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import static edu.wpi.first.units.Units.Volts;
-import static edu.wpi.first.units.Units.Seconds;
-import static edu.wpi.first.units.Units.Second;
-import static edu.wpi.first.units.Units.Radians;
-import static edu.wpi.first.units.Units.RadiansPerSecond;
-
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -36,7 +30,7 @@ import frc.robot.Constants.SwerveConstants.TunerConstants;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.SwerveConstants.SwerveChassis.SwerveModuleConstantsEnum;
 
-public class DriveSubsystem extends SwerveDrivetrain implements Subsystem {
+public class DriveSubsystem extends SwerveDrivetrain<TalonFX,TalonFX,CANcoder> implements Subsystem {
 
   /* Keep track if we've ever applied the operator perspective before or not */
   private boolean hasAppliedOperatorPerspective = false;
@@ -80,12 +74,16 @@ public class DriveSubsystem extends SwerveDrivetrain implements Subsystem {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem(double OdometryUpdateFrequency) {
-        super(TunerConstants.DrivetrainConstants, OdometryUpdateFrequency, configureSwerveChassis());
+        super(
+          TalonFX::new, TalonFX::new, CANcoder::new,
+          TunerConstants.DrivetrainConstants, OdometryUpdateFrequency, configureSwerveChassis());
         imu = this.getPigeon2();
     }
 
   public DriveSubsystem() {
-        super(TunerConstants.DrivetrainConstants, configureSwerveChassis());
+        super(
+          TalonFX::new, TalonFX::new, CANcoder::new,
+          TunerConstants.DrivetrainConstants, configureSwerveChassis());
         imu = this.getPigeon2();
 
         this.registerTelemetry(this::telemeterize);
@@ -109,7 +107,7 @@ public class DriveSubsystem extends SwerveDrivetrain implements Subsystem {
     return mSysIdRoutine.dynamic(direction);
   }
 
-  public static SwerveModuleConstants[] configureSwerveChassis() {
+  public static SwerveModuleConstants [] configureSwerveChassis() {
     return new SwerveModuleConstants[] {
         TunerConstants.ConstantCreator.createModuleConstants(
             SwerveModuleConstantsEnum.MOD0.getAngleMotorID(),
@@ -204,11 +202,11 @@ public class DriveSubsystem extends SwerveDrivetrain implements Subsystem {
   }
 
   public TalonFX getDriveMotor(int modNum){
-    return (TalonFX)this.getModule(modNum).getDriveMotor();
+    return this.getModule(modNum).getDriveMotor();
   }
 
   public TalonFX getTurnMotor(int modNum){
-    return (TalonFX)this.getModule(modNum).getSteerMotor();
+    return this.getModule(modNum).getSteerMotor();
   }
 
   public double getDriveEncoder(int modNum){
@@ -238,19 +236,19 @@ public class DriveSubsystem extends SwerveDrivetrain implements Subsystem {
   }
 
   public double getCancoderAbsolute(int modNum){
-    return ((CANcoder)(this.getModule(modNum).getEncoder())).getAbsolutePosition().getValueAsDouble();
+    return this.getModule(modNum).getEncoder().getAbsolutePosition().getValueAsDouble();
   }
 
   public double getCancoderRelative(int modNum){
-    return ((CANcoder)(this.getModule(modNum).getEncoder())).getPosition().getValueAsDouble();
+    return this.getModule(modNum).getEncoder().getPosition().getValueAsDouble();
   }
 
    public double getCancoderAbsoluteSI(int modNum){
-    return ((CANcoder)(this.getModule(modNum).getEncoder())).getAbsolutePosition().getValueAsDouble()*360.0;
+    return this.getModule(modNum).getEncoder().getAbsolutePosition().getValueAsDouble()*360.0;
   }
 
   public double getCancoderRelativeSI(int modNum){
-    return ( ((CANcoder)(this.getModule(modNum).getEncoder())).getPosition().getValueAsDouble()
+    return ( this.getModule(modNum).getEncoder().getPosition().getValueAsDouble()
             - getModuleEnum(modNum).getAngleOffset())*360.0;
   }
 

@@ -122,7 +122,7 @@ public final class Constants {
 					.withPigeon2Id(IMUConstants.kPigeonId)
 					.withPigeon2Configs(IMUConstants.pigeonConfigs);
 
-			public static final SwerveModuleConstantsFactory ConstantCreator = new SwerveModuleConstantsFactory()
+			public static final SwerveModuleConstantsFactory<TalonFXConfiguration,TalonFXConfiguration,CANcoderConfiguration> ConstantCreator = new SwerveModuleConstantsFactory<TalonFXConfiguration,TalonFXConfiguration,CANcoderConfiguration> ()
 					.withDriveMotorGearRatio(kDriveGearRatio)
 					.withSteerMotorGearRatio(kSteerGearRatio)
 					.withCouplingGearRatio(kCoupleRatio)
