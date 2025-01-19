@@ -99,6 +99,7 @@ public class RobotContainer {
     //testNotePickup();
     // try {
     //   testAuto();
+    //sdfouhfaoidfn
     // }
     // catch (Exception e) {
     //   System.out.println("test auto error: " + e);
