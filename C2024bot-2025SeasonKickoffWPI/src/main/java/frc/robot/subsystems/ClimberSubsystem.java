@@ -14,11 +14,11 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.SwerveConstants.Intake;
 
-public class IntakeSubsystem extends SubsystemBase {
+public class ClimberSubsystem extends SubsystemBase {
 
 
-  /** Creates a new IntakeSubsystem. */
-  public IntakeSubsystem() {
+  /** Creates a new ClimberSubsystem. */
+  public ClimberSubsystem() {
 
 
   }
