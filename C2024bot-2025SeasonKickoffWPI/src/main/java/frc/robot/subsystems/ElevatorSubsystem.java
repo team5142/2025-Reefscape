@@ -45,7 +45,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     leadElevatorMotor = new SparkMax(10, MotorType.kBrushless);
     followingElevatorMotor = new SparkMax(11, MotorType.kBrushless);
     //These two control the main stage
-    secondaryElevatorMotor = new SparkMax(11, MotorType.kBrushless);
+    secondaryElevatorMotor = new SparkMax(12, MotorType.kBrushless);
     //This motor controls the second stage
 
     leadElevatorConfig = new SparkMaxConfig();
