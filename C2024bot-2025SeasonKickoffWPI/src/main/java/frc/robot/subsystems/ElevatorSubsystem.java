@@ -22,43 +22,68 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.CurrentLimiter;
 import frc.robot.Constants.EnableCurrentLimiter;
 import frc.robot.Constants.EnabledSubsystems;
 import frc.robot.Constants.GPMConstants.Arm;
 
 import frc.robot.Constants.GPMConstants.Arm.ArmMotorConstantsEnum;
 import frc.robot.Constants.GPMConstants.Arm.ArmPIDConstants;
+import frc.robot.Constants.CurrentLimits;
 
 public class ElevatorSubsystem extends SubsystemBase {
   /** Creates a new GPMSubsystem. */
 
-  public InterpolatingDoubleTreeMap FEED_FORWARD = new InterpolatingDoubleTreeMap();
-
-  // === ARM ====
-
-  // NEO motors connected to Spark Max
-  private SparkMax armMotorLeft;
-  private SparkMax armMotorRight;
-  private SparkMax armMotorLeader;
-
-  private SparkClosedLoopController armPIDControllerLeft;
-  private SparkClosedLoopController armPIDControllerRight;
-  
-  // We wii use built-in NEO encoders for now
-  // They're relative, but we can calibrate them based on second Pigeon on the arm
-  private RelativeEncoder armEncoderLeft;
-  private RelativeEncoder armEncoderRight;
-  private RelativeEncoder armEncoderLeader;
-
-  private Pigeon2 armImu;
-  private double armEncoderZero;
-
-  // private SparkLimitSwitch noteSensor; //limit switch
-
+  private SparkMax leadElevatorMotor;
+  private SparkMaxConfig leadElevatorConfig;
+  private SparkMax followingElevatorMotor;
+  private SparkMaxConfig followingElevatorConfig;
+  private SparkMax secondaryElevatorMotor;
+  private SparkMaxConfig secondaryElevatorConfig;
+  /** Creates a new ClimberSubsystem. */
   public ElevatorSubsystem() {
 
-    // Check if need to initialize arm
+    leadElevatorMotor = new SparkMax(10, MotorType.kBrushless);
+    followingElevatorMotor = new SparkMax(11, MotorType.kBrushless);
+    //These two control the main stage
+    secondaryElevatorMotor = new SparkMax(11, MotorType.kBrushless);
+    //This motor controls the second stage
+
+    leadElevatorConfig = new SparkMaxConfig();
+    followingElevatorConfig = new SparkMaxConfig();
+    secondaryElevatorConfig = new SparkMaxConfig();
+
+
+    configureClimberMotors();
+  }
+
+  private void configureClimberMotors(){
+
+    leadElevatorConfig.encoder
+    .positionConversionFactor(1)
+    .velocityConversionFactor(1);
+    followingElevatorConfig.encoder
+    .positionConversionFactor(1)
+    .velocityConversionFactor(1);
+    secondaryElevatorConfig.encoder
+    .positionConversionFactor(1)
+    .velocityConversionFactor(1);
+    //Encoders are reset, if we want to go by inches or something we can try multiplying but
+    //I think it's easier to just go by rotations and find values with hardware client
+
+    followingElevatorConfig.follow(10, true); 
+    //Follows the lead motor, invert is set to true. We may want to also invert the other motor.
+
+  leadElevatorConfig.smartCurrentLimit(CurrentLimits.Neo500);
+  followingElevatorConfig.smartCurrentLimit(CurrentLimits.Neo500);
+  secondaryElevatorConfig.smartCurrentLimit(CurrentLimits.Neo500);
+    //Applies a 40 amp limit
+
+  leadElevatorMotor.configure(leadElevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+  followingElevatorMotor.configure(followingElevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+  secondaryElevatorMotor.configure(secondaryElevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    //Resets and configures sparkmaxes
+
+
   }
   @Override
   public void periodic() {

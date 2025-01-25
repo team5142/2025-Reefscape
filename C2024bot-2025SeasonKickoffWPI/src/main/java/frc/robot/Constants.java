@@ -326,11 +326,9 @@ public final class Constants {
 		}
 	}
 
-	public static final class CurrentLimiter {
-		public static int drive = 60;
-		public static int intake = 0;
-		public static int arm = 40;
-		public static int shooter = 40;
+	public static final class CurrentLimits {
+		public static int Neo550 = 20;
+		public static int Neo500 = 40;
 	}
 
 	public static final class DebugTelemetrySubsystems {
