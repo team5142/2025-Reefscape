@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
@@ -19,12 +20,17 @@ public class ClimberSubsystem extends SubsystemBase {
   private SparkMax climberMotor;
   private SparkMaxConfig climberConfig;
 
+  private SparkClosedLoopController climberController;
+
   /** Creates a new ClimberSubsystem. */
+
   public ClimberSubsystem() {
 
     climberMotor = new SparkMax(15, MotorType.kBrushless);
 
     climberConfig = new SparkMaxConfig();
+
+    climberController = climberMotor.getClosedLoopController();
 
     configureClimberMotor();
   }

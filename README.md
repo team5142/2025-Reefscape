@@ -1,6 +1,6 @@
 # FRC 2025 Team 5142 Code Base
 
-# Swerve 
+# Swerve - (canivore, ctre proprietary loop)
 
 # Front left - angle motor ID 1 - Kraken
 # Front left - drive motor ID 2 - Kraken
@@ -27,6 +27,10 @@
 
 # End Effector
 
+# Arm
+
+# NEO 500
+
 # Coral Motor NEO 550 ID 13
 # Algae Motor NEO 550 ID 14
 
@@ -34,4 +38,15 @@
 
 # NEO 500 ID 15
 
+# Encoders and Sensors
+
+# Drivetrain - 4 absolute cancoders
+
+# Gyro - Pigeon 2 
+
+# Elevator - 2 redux robotics absolute encoders
+
+# Intake - 3 redux robotics color sensors
+
+# Climber - Maybe redux robotics absolute encoder maybe limit switch
 
