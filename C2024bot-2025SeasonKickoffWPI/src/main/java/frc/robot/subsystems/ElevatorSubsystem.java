@@ -16,21 +16,32 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CurrentLimits;
 import com.revrobotics.spark.config.AbsoluteEncoderConfig;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
 public class ElevatorSubsystem extends SubsystemBase {
   /** Creates a new GPMSubsystem. */
 
   private SparkMax leadElevatorMotor;
-  private SparkMaxConfig leadElevatorConfig;
   private SparkMax followingElevatorMotor;
-  private SparkMaxConfig followingElevatorConfig;
   private SparkMax secondaryElevatorMotor;
+
+  private SparkMaxConfig leadElevatorConfig;
+  private SparkMaxConfig followingElevatorConfig;
   private SparkMaxConfig secondaryElevatorConfig;
 
-  private AbsoluteEncoder leadEncoder;
-  private AbsoluteEncoder secondaryEncoder;
+  private final double primarykP = 0.01;
+  private final double primarykI = 0.01;
+  private final double primarykD = 0.01;
 
-  private AbsoluteEncoderConfig encoderConfig;
+  private final double primaryForwardSpeedLimit = 0.5;
+  private final double primaryReverseSpeedLimit = 0.5;
+
+  private final double secondarykP = 0.01;
+  private final double secondarykI = 0.01;
+  private final double secondarykD = 0.01;
+
+  private final double secondaryForwardSpeedLimit = 0.5;
+  private final double secondaryReverseSpeedLimit = 0.5;
 
   private SparkClosedLoopController leadPID;
   private SparkClosedLoopController secondaryPID;
@@ -47,9 +58,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
 
     //Initialize Canandmags
-    leadEncoder = leadElevatorMotor.getAbsoluteEncoder();
-    secondaryEncoder = secondaryElevatorMotor.getAbsoluteEncoder();
-
+    
 
     //Initialize PIDS
     leadPID = leadElevatorMotor.getClosedLoopController();
@@ -60,7 +69,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     followingElevatorConfig = new SparkMaxConfig();
     secondaryElevatorConfig = new SparkMaxConfig();
     //Only one config is necessary as it will be used for all the canandmags.
-    encoderConfig = new AbsoluteEncoderConfig();
+   
 
     configureClimberMotors();
   }
@@ -68,35 +77,53 @@ public class ElevatorSubsystem extends SubsystemBase {
   private void configureClimberMotors(){
 
    
-    encoderConfig.averageDepth(8) //Placeholder configuration, to be applied to both sparkmaxes
-    .positionConversionFactor(1);
-
-    leadElevatorConfig.absoluteEncoder.apply(encoderConfig);
-    secondaryElevatorConfig.absoluteEncoder.apply(encoderConfig);
+    
     //Encoders are reset, if we want to go by inches or something we can try multiplying but
     //I think it's easier to just go by rotations and find values with hardware client
 
     
   
     followingElevatorConfig.follow(10, true); 
-    //Follows the lead motor, invert is set to true. We may want to also invert the other motor.
+      //Follows the lead motor, invert is set to true. We may want to also invert the other motor.
 
-  leadElevatorConfig.smartCurrentLimit(CurrentLimits.Neo500);
-  followingElevatorConfig.smartCurrentLimit(CurrentLimits.Neo500);
-  secondaryElevatorConfig.smartCurrentLimit(CurrentLimits.Neo500);
-    //Applies a 40 amp limit
+    leadElevatorConfig.smartCurrentLimit(CurrentLimits.Neo500);
+    followingElevatorConfig.smartCurrentLimit(CurrentLimits.Neo500);
+    secondaryElevatorConfig.smartCurrentLimit(CurrentLimits.Neo500);
+      //Applies a 40 amp limit
 
-  leadElevatorConfig.idleMode(IdleMode.kBrake);
-  followingElevatorConfig.idleMode(IdleMode.kBrake);
-  secondaryElevatorConfig.idleMode(IdleMode.kBrake);
-    // Makes it so that the motors stay in their position after being shut off.
+    leadElevatorConfig.idleMode(IdleMode.kBrake);
+    followingElevatorConfig.idleMode(IdleMode.kBrake);
+    secondaryElevatorConfig.idleMode(IdleMode.kBrake);
+      // Makes it so that the motors stay in their position after being shut off.
 
-  leadElevatorMotor.configure(leadElevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-  followingElevatorMotor.configure(followingElevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-  secondaryElevatorMotor.configure(secondaryElevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    //Resets and configures sparkmaxes
+    leadElevatorConfig.closedLoop
+      .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+      // Set PID values for position control. We don't need to pass a closed loop
+      // slot, as it will default to slot 0.
+      .p(primarykP)
+      .i(primarykI)
+      .d(primarykD)
+      .outputRange(primaryReverseSpeedLimit, primaryForwardSpeedLimit);
+
+    secondaryElevatorConfig.closedLoop
+      .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+      // Set PID values for position control. We don't need to pass a closed loop
+      // slot, as it will default to slot 0.
+      .p(secondarykP)
+      .i(secondarykI)
+      .d(secondarykD)
+      .outputRange(secondaryReverseSpeedLimit, secondaryForwardSpeedLimit);
 
 
+    leadElevatorMotor.configure(leadElevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    followingElevatorMotor.configure(followingElevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    secondaryElevatorMotor.configure(secondaryElevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      //Resets and configures sparkmaxes
+
+
+
+
+   
   }
   @Override
   public void periodic() {

@@ -30,7 +30,7 @@ public class ArmSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
   public ArmSubsystem() {
 
-    armMotor = new SparkMax(11, MotorType.kBrushless);
+    armMotor = new SparkMax(13, MotorType.kBrushless);
 
     armConfig = new SparkMaxConfig();
 

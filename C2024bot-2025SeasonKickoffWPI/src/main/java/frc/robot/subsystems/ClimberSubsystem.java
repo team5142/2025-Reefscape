@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -13,24 +14,26 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CurrentLimits;
-
 public class ClimberSubsystem extends SubsystemBase {
 
 
   private SparkMax climberMotor;
   private SparkMaxConfig climberConfig;
-
+  private AbsoluteEncoder climberEncoder;
+  
   private SparkClosedLoopController climberController;
 
   /** Creates a new ClimberSubsystem. */
 
   public ClimberSubsystem() {
 
-    climberMotor = new SparkMax(15, MotorType.kBrushless);
+    climberMotor = new SparkMax(16, MotorType.kBrushless);
 
     climberConfig = new SparkMaxConfig();
 
     climberController = climberMotor.getClosedLoopController();
+
+    climberEncoder = climberMotor.getAbsoluteEncoder();
 
     configureClimberMotor();
   }
@@ -43,6 +46,8 @@ public class ClimberSubsystem extends SubsystemBase {
 
   climberConfig.smartCurrentLimit(CurrentLimits.Neo500);
   climberMotor.configure(climberConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+
   }
   @Override
   public void periodic() {

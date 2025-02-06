@@ -27,16 +27,16 @@
 
 # End Effector
 
-# Arm
+# Arm ID 13
 
 # NEO 500
 
-# Coral Motor NEO 550 ID 13
-# Algae Motor NEO 550 ID 14
+# Coral Motor NEO 550 ID 14 
+# Algae Motor NEO 550 ID 15
 
 # Climber
 
-# NEO 500 ID 15
+# NEO 500 ID 16
 
 # Encoders and Sensors
 
@@ -44,7 +44,7 @@
 
 # Gyro - Pigeon 2 
 
-# Elevator - 2 redux robotics absolute encoders
+# Elevator - 2 Limit switches
 
 # Intake - 3 redux robotics color sensors
 

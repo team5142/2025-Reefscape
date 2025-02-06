@@ -27,7 +27,7 @@ public class IntakeSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
 
-    intakeMotor = new SparkMax(11, MotorType.kBrushless);
+    intakeMotor = new SparkMax(14, MotorType.kBrushless);
 
     intakeConfig = new SparkMaxConfig();
 
