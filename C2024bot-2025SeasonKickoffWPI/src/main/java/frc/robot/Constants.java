@@ -95,20 +95,20 @@ public final class Constants {
 
 			// Theoretical free speed (m/s) at 12v applied output;
 			// This needs to be tuned to your individual robot
-			public static final LinearVelocity speedAt12Volts = MetersPerSecond.of(5.21);
-
+			public static final LinearVelocity speedAt12Volts = MetersPerSecond.of(5.21); // MAX METERS PER SECOND AT L3 MK4I KRACKENS (without fov)
 			// Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
 			// This may need to be tuned to your individual robot
-			private static final double kCoupleRatio = 3.5714285714285716;
+			private static final double kCoupleRatio = 3.5714285714285716; //TODO: FIGURE THIS OUT
 
-			private static final double kDriveGearRatio = 6.122448979591837 * (1/2.09);
-			private static final double kSteerGearRatio = 21.428571428571427;
-			private static final Distance wheelRadius = Inches.of(5.33 / 5.71);
+			private static final double kDriveGearRatio = 6.122448979591837 * (1/2.09); //TODO: FIGURE THIS OUT
+			private static final double kSteerGearRatio = 21.428571428571427; //TODO: FIGURE THIS OUT
+			private static final Distance wheelRadius = Inches.of(2);
 
 			private static final boolean kInvertLeftSide = false;
 			private static final boolean kInvertRightSide = true;
 
-			public static final CANBus kCANBus = new CANBus("", "./logs/example.hoot");
+			// Important LINE ? !!!
+			public static final CANBus kCANBus = new CANBus("INSERT CANIVORE NAME HERE");
 
 			// These are only used for simulation
 			private static final double kSteerInertia = 0.01;
@@ -147,8 +147,8 @@ public final class Constants {
 
 		public static class SwerveChassis {
 
-			public static final double TRACK_WIDTH = 0.525; // left to right
-			public static final double WHEEL_BASE = 0.525; // front to back
+			public static final double TRACK_WIDTH = Units.inchesToMeters(23); // left to right distance between wheels in meters
+			public static final double WHEEL_BASE = Units.inchesToMeters(23); // front to back
 			public static final double WHEEL_DIAMETER = Units.inchesToMeters(4);
 			public static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
 

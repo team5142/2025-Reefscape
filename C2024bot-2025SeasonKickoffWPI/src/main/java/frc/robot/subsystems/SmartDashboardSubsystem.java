@@ -13,6 +13,8 @@ public class SmartDashboardSubsystem extends SubsystemBase {
   public SmartDashboardSubsystem() {}
 
   public void updateOdometryTelemetry() {
+    SmartDashboard.putString("REMINDER", "None of these values are correct until we tune them to our robot");
+
     for (int i =0; i<4; i++){
       SmartDashboard.putNumber("S"+i+" Drive Encoder", RobotContainer.driveSubsystem.getDriveEncoder(i));
       SmartDashboard.putNumber("S"+i+" Drive Velocity", RobotContainer.driveSubsystem.getDriveVelocity(i));

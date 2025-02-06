@@ -45,13 +45,13 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public static Controller xboxDriveController;
-  public static Controller xboxGPMController;
+  // public static Controller xboxGPMController;
   public static final DriveSubsystem driveSubsystem = new DriveSubsystem();
-  public static final ElevatorSubsystem armSubsystem = new ElevatorSubsystem();
+  // public static final ElevatorSubsystem armSubsystem = new ElevatorSubsystem();
   public static final SmartDashboardSubsystem smartDashboardSubsystem = new SmartDashboardSubsystem();
-  public static final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-  public final static GPMHelpers gpmHelpers = new GPMHelpers();
-  public static final LLVisionSubsystem llVisionSubsystem = new LLVisionSubsystem();
+  // public static final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  // public final static GPMHelpers gpmHelpers = new GPMHelpers();
+  // public static final LLVisionSubsystem llVisionSubsystem = new LLVisionSubsystem();
 
   public static boolean isAllianceRed = false;
   public static boolean isReversingControllerAndIMUForRed = true;
@@ -130,7 +130,7 @@ public class RobotContainer {
 
   private void configureDriverInterface(){
     xboxDriveController = new Controller(ControllerDevice.XBOX_CONTROLLER);
-    xboxGPMController = new Controller(ControllerDevice.XBOX_CONTROLLER_GPM);
+    // xboxGPMController = new Controller(ControllerDevice.XBOX_CONTROLLER_GPM);
   }
   
 
