@@ -13,7 +13,7 @@ import frc.robot.commands.AutonomousTrajectory2Poses;
 import frc.robot.commands.DriveManuallyCommand;
 
 import frc.robot.commands.RunTrajectorySequenceRobotAtStartPoint;
-
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import frc.robot.commands.StopRobot;
 import frc.robot.commands.TurnToRelativeAngleSoftwarePIDCommand;
 import frc.robot.commands.TurnToRelativeAngleTrapezoidProfile;
@@ -44,8 +44,13 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  //xbox controller
   public static Controller xboxDriveController;
-  // public static Controller xboxGPMController;
+
+  //these control the button box
+  // public static CommandGenericHID buttonBoxRightSide = new CommandGenericHID(0);
+  // public static CommandGenericHID buttonBoxLeftSide = new CommandGenericHID(1);
+
   public static final DriveSubsystem driveSubsystem = new DriveSubsystem();
   // public static final ElevatorSubsystem armSubsystem = new ElevatorSubsystem();
   public static final SmartDashboardSubsystem smartDashboardSubsystem = new SmartDashboardSubsystem();
@@ -53,13 +58,10 @@ public class RobotContainer {
   // public final static GPMHelpers gpmHelpers = new GPMHelpers();
   // public static final LLVisionSubsystem llVisionSubsystem = new LLVisionSubsystem();
 
-  public static boolean isAllianceRed = false;
+  public static boolean isAllianceRed = false; // TODO: change to DriverStation.getalliance();
   public static boolean isReversingControllerAndIMUForRed = true;
 
-  public static Controller driveStick; // for robot testing only
-  public static Controller driveStick1; // for robot testing only
-  public static Controller driveStick2; // for robot testing only
-  public static Controller driveStick3; // for robot testing only
+
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   // private final CommandXboxController m_driverController =
@@ -130,7 +132,6 @@ public class RobotContainer {
 
   private void configureDriverInterface(){
     xboxDriveController = new Controller(ControllerDevice.XBOX_CONTROLLER);
-    // xboxGPMController = new Controller(ControllerDevice.XBOX_CONTROLLER_GPM);
   }
   
 

@@ -95,7 +95,7 @@ public final class Constants {
 
 			// Theoretical free speed (m/s) at 12v applied output;
 			// This needs to be tuned to your individual robot
-			public static final LinearVelocity speedAt12Volts = MetersPerSecond.of(5.21); // MAX METERS PER SECOND AT L3 MK4I KRACKENS (without fov)
+			public static final LinearVelocity speedAt12Volts = MetersPerSecond.of(5.21); // Updated, change to make robot go slower
 			// Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
 			// This may need to be tuned to your individual robot
 			private static final double kCoupleRatio = 3.5714285714285716; //TODO: FIGURE THIS OUT
