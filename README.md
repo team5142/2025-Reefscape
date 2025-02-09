@@ -46,7 +46,7 @@
 
 # Elevator - 2 Limit switches
 
-# Intake - 3 redux robotics color sensors
+# Intake - 3 redux robotics color sensors CAN IDs 17, 18, 19
 
 # Climber - Maybe redux robotics absolute encoder maybe limit switch
 
