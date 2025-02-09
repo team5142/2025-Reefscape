@@ -84,16 +84,16 @@ public class IntakeSubsystem extends SubsystemBase {
     //NOTE: For PID Testing, we might need to change the persist mode.
 
     coralConfig.encoder
-    .positionConversionFactor(1)
-    .velocityConversionFactor(1);
+      .positionConversionFactor(1)
+      .velocityConversionFactor(1);
     algaeConfig.encoder
-    .positionConversionFactor(1)
-    .velocityConversionFactor(1);
+      .positionConversionFactor(1)
+      .velocityConversionFactor(1);
 
-  coralConfig.smartCurrentLimit(CurrentLimits.Neo550);
-  algaeConfig.smartCurrentLimit(CurrentLimits.Neo550);
+    coralConfig.smartCurrentLimit(CurrentLimits.Neo550);
+    algaeConfig.smartCurrentLimit(CurrentLimits.Neo550);
   
-   algaeConfig.closedLoop
+    algaeConfig.closedLoop
       .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
       // Set PID values for position control. We don't need to pass a closed loop
       // slot, as it will default to slot 0.
@@ -102,8 +102,8 @@ public class IntakeSubsystem extends SubsystemBase {
       .d(algaekD)
       .outputRange(algaeReverseSpeedLimit, algaeForwardSpeedLimit);
 
-  coralMotor.configure(coralConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-  algaeMotor.configure(algaeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    coralMotor.configure(coralConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    algaeMotor.configure(algaeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
   }
 
@@ -116,40 +116,36 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   private void intakeAlgae(){
-
     algaeMotor.set(algaeIntakeSpeed);
-
   }
 
   private void ejectAlgae(){
-
     algaeMotor.set(algaeEjectSpeed);
+  }
 
+  private void stopAlgae(){
+    algaeMotor.set(0);
   }
 
   private void intakeCoral(){
-
     coralMotor.set(coralIntakeSpeed);
-
   }
 
   private void ejectCoral(){
-
     coralMotor.set(coralEjectSpeed);
+  }
 
+  private void stopCoral(){
+    coralMotor.set(0);
   }
 
   private boolean isAlgaeIntaked(){
-
     return algaeSensor.getProximity() < algaeProximityThreshold; 
     //algae sensor returns a value between 0 and 1, and we will find the value that determines if the algae is present.
-
   }
 
   private boolean isLeftCoralIntaked(){
-
     return leftCoralSensor.getProximity() < coralProximityThreshold;
-
   }
 
   private boolean isRightCoralIntaked(){
@@ -161,7 +157,6 @@ public class IntakeSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
     // display isAlgaeIntaked() and left and right coral to the SmartDashboard
   }
 }
