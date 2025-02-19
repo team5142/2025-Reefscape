@@ -50,6 +50,8 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {}
 
+
+  // Add coast modes and change positions to home
   @Override
   public void disabledPeriodic() {}
 

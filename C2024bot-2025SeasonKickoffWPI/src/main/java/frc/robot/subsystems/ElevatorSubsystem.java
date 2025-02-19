@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -30,7 +31,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private SparkMaxConfig secondaryElevatorConfig;
 
   private final double primarykP = 0.01;
-  private final double primarykI = 0.01;
+  private final double primarykI = 0;
   private final double primarykD = 0.01;
 
   private final double primaryForwardSpeedLimit = 0.5;
@@ -50,14 +51,13 @@ public class ElevatorSubsystem extends SubsystemBase {
   /** Creates a new ClimberSubsystem. */
   public ElevatorSubsystem() {
 
-    leadElevatorMotor = new SparkMax(10, MotorType.kBrushless);
-    followingElevatorMotor = new SparkMax(11, MotorType.kBrushless);
+    leadElevatorMotor = new SparkMax(15, MotorType.kBrushless);
+    followingElevatorMotor = new SparkMax(16, MotorType.kBrushless);
     //These two control the main stage
-    secondaryElevatorMotor = new SparkMax(12, MotorType.kBrushless);
+    secondaryElevatorMotor = new SparkMax(17, MotorType.kBrushless);
     //This motor controls the second stage
 
 
-    //Initialize Canandmags
     
 
     //Initialize PIDS
@@ -83,7 +83,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     
   
-    followingElevatorConfig.follow(10, true); 
+    followingElevatorConfig.follow(15, true); 
       //Follows the lead motor, invert is set to true. We may want to also invert the other motor.
 
     leadElevatorConfig.smartCurrentLimit(CurrentLimits.Neo500);
@@ -125,9 +125,23 @@ public class ElevatorSubsystem extends SubsystemBase {
 
    
   }
+  
+  private void setPrimaryPosition(double position) {
+
+    leadPID.setReference(position, ControlType.kPosition);
+
+  }
+
+  private void setSecondaryPosition(double position) {
+
+    secondaryPID.setReference(position, ControlType.kPosition);
+    
+  }
+  
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
+    //smartdashboard
   }
 }

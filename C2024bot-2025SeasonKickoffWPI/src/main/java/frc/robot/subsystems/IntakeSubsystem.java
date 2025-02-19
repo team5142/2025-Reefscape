@@ -109,49 +109,47 @@ public class IntakeSubsystem extends SubsystemBase {
 
   //methods to be called in commands and as instant commands
   
-  private void holdAlgae(){
+  public void holdAlgae(){
 
     algaePID.setReference(algaeEncoder.getPosition(), ControlType.kPosition);
     //sets the reference to the current position, so that it keeps the motor in the same place once the algae is intaked and keeps it secured.
   }
 
-  private void intakeAlgae(){
+  public void intakeAlgae(){
     algaeMotor.set(algaeIntakeSpeed);
   }
 
-  private void ejectAlgae(){
+  public void ejectAlgae(){
     algaeMotor.set(algaeEjectSpeed);
   }
 
-  private void stopAlgae(){
+  public void stopAlgae(){
     algaeMotor.set(0);
   }
 
-  private void intakeCoral(){
+  public void intakeCoral(){
     coralMotor.set(coralIntakeSpeed);
   }
 
-  private void ejectCoral(){
+  public void ejectCoral(){
     coralMotor.set(coralEjectSpeed);
   }
 
-  private void stopCoral(){
+  public void stopCoral(){
     coralMotor.set(0);
   }
 
-  private boolean isAlgaeIntaked(){
+  public boolean isAlgaeIntaked(){
     return algaeSensor.getProximity() < algaeProximityThreshold; 
     //algae sensor returns a value between 0 and 1, and we will find the value that determines if the algae is present.
   }
 
-  private boolean isLeftCoralIntaked(){
+  public boolean isLeftCoralIntaked(){
     return leftCoralSensor.getProximity() < coralProximityThreshold;
   }
 
-  private boolean isRightCoralIntaked(){
-
+  public boolean isRightCoralIntaked(){
     return rightCoralSensor.getProximity() < coralProximityThreshold;
-
   }
 
   @Override

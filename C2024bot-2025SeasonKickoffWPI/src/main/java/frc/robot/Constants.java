@@ -47,6 +47,56 @@ public final class Constants {
 		public static final int kDriverControllerPort = 0;
 	}
 
+	public static final class Position {
+		// Positions in order: Primary Elevator, Secondary Elevator, Arm Position (0 -> 1)
+		public enum Orientations {
+			Home("Home",
+							0,
+							0,
+							0),
+			L1("L1",
+							0,
+							0,
+							0),
+			L2("L2",
+							0,
+							0,
+							0),
+			L3("L3",
+							0,
+							0,
+							0),
+			L4("L4",
+							0,
+							0,
+							0),
+			Processor("Processor",
+							0,
+							0,
+							0),
+			Barge("Barge",
+							0,
+							0,
+							0);
+
+			public final String label;
+			public final double primaryElevator;
+			public final double secondaryElevator;
+			public final double armPosition;
+
+			private Orientations(String label,
+							double primaryElevator,
+							double secondaryElevator,
+							double armPosition) {
+					this.label = label;
+					this.primaryElevator = primaryElevator;
+					this.secondaryElevator = secondaryElevator;
+					this.armPosition = armPosition;
+			}
+
+		}
+    }
+
 	public static class SwerveConstants {
 		public static class TunerConstants {
 			public static final double steerGainsKP = 100;

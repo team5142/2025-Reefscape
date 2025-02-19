@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -14,6 +15,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CurrentLimits;
+
 public class ClimberSubsystem extends SubsystemBase {
 
 
@@ -21,17 +23,17 @@ public class ClimberSubsystem extends SubsystemBase {
   private SparkMaxConfig climberConfig;
   private AbsoluteEncoder climberEncoder;
   
-  private SparkClosedLoopController climberController;
+  private SparkClosedLoopController climberPID;
 
   /** Creates a new ClimberSubsystem. */
 
   public ClimberSubsystem() {
 
-    climberMotor = new SparkMax(16, MotorType.kBrushless);
+    climberMotor = new SparkMax(21, MotorType.kBrushless);
 
     climberConfig = new SparkMaxConfig();
 
-    climberController = climberMotor.getClosedLoopController();
+    climberPID = climberMotor.getClosedLoopController();
 
     climberEncoder = climberMotor.getAbsoluteEncoder();
 
@@ -49,6 +51,13 @@ public class ClimberSubsystem extends SubsystemBase {
 
 
   }
+
+  public void setClimberPosition(double position) {
+
+    climberPID.setReference(position, ControlType.kPosition);
+
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

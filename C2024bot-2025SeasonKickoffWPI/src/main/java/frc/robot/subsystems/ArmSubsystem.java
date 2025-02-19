@@ -16,6 +16,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -25,16 +26,16 @@ public class ArmSubsystem extends SubsystemBase {
 
   private SparkMax armMotor;
   private SparkMaxConfig armConfig;
-  private SparkClosedLoopController armController;
+  private SparkClosedLoopController armPID;
 
   /** Creates a new IntakeSubsystem. */
   public ArmSubsystem() {
 
-    armMotor = new SparkMax(13, MotorType.kBrushless);
+    armMotor = new SparkMax(18, MotorType.kBrushless);
 
     armConfig = new SparkMaxConfig();
 
-    armController = armMotor.getClosedLoopController();
+    armPID = armMotor.getClosedLoopController();
 
     configureIntakeMotor();
 
@@ -53,6 +54,10 @@ public class ArmSubsystem extends SubsystemBase {
   armConfig.smartCurrentLimit(CurrentLimits.Neo550);
   armMotor.configure(armConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
+  }
+
+  public void setArmPosition(double position){
+    armPID.setReference(position, ControlType.kPosition);
   }
 
   @Override
