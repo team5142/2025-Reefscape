@@ -14,29 +14,34 @@
 # Back right - angle motor ID 7 - Kraken
 # Back right - drive motor ID 8 - Kraken
 
-# PDH ID 9
+# Pigeon ID 9
+
+# Front left encoder ID 10
+# Front right encoder ID 11
+# Back left encoder ID 12
+# Back right encoder ID 13
 
 # Elevator Main Stage
 
-# NEO 500 Leader ID 10
-# NEO 500 Follower ID 11
+# PDH ID 14 
+
+# NEO 500 Leader ID 15
+# NEO 500 Follower ID 16
 
 # Elevator Secondary Stage
 
-# NEO 500 ID 12
+# NEO 500 ID 17
 
 # End Effector
 
-# Arm ID 13
+# Arm ID 18 NEO 500
 
-# NEO 500
-
-# Coral Motor NEO 550 ID 14 
-# Algae Motor NEO 550 ID 15
+# Coral Motor NEO 550 ID 19
+# Algae Motor NEO 550 ID 20
 
 # Climber
 
-# NEO 500 ID 16
+# NEO 500 ID 21
 
 # Encoders and Sensors
 
@@ -46,7 +51,7 @@
 
 # Elevator - 2 Limit switches
 
-# Intake - 3 redux robotics color sensors CAN IDs 17, 18, 19
+# Intake - 3 redux robotics color sensors CAN IDs 22, 23, 24
 
-# Climber - Maybe redux robotics absolute encoder maybe limit switch
+# Climber - Encoder ID 25
 
